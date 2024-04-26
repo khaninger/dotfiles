@@ -9,6 +9,8 @@
   home.stateVersion = "23.11"; # Please read the comment before changing.
 
   home.packages = with pkgs;  [
+    ruff-lsp
+    tree-sitter
   ];
 
   # Manage home files
@@ -19,12 +21,6 @@
     };
   };
 
-  home.shellAliases = {
-    ll = "ls -l";
-    em = "emacs -nw $1";
-    update = "sudo nixos-rebuild switch";    
-  };
-
   home.sessionVariables = {
     EDITOR = "emacs";
   };
@@ -33,15 +29,15 @@
   programs.git = {
     enable = true;
     userName = "Kevin Haninger";
-    userEmail = "email@host.com";
+    userEmail = "khaninger@gmail.com";
   }; 
   programs.emacs = {
    enable = true;
-   #package = pkgs.emacs29-pgtk;
    package = pkgs.emacs29;
    extraPackages = (
      epkgs: (with epkgs; [
        spacemacs-theme
+       tree-sitter-langs
      ])
    );
   }; 
@@ -65,7 +61,7 @@
     enable = true;
     settings = {
       add_newline = false;
-      format = "$directory$git_branch";
+      format = "$directory$git_branch$git_status$character";
     };
   };
 
