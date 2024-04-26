@@ -1,0 +1,1 @@
+/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/.emacs.d/early-init.el
