@@ -13,6 +13,10 @@ done
 
 # Setup home-manager
 echo "Setting up home-manager"
+# Setup home-manager file
+echo "Soft linking home.nix"
+ln -s ${HOME}/.dotfiles/home-manager/home.nix ${HOME}/.config/home-manager/
+
 curl -L https://nixos.org/nix/install | sh
 # Verify nix, e.g. 'nix-shell', might need to run the activation script/restart or chown sth
 
@@ -21,12 +25,11 @@ nix-channel --add https://github.com/nix-community/home-manager/archive/master.t
 nix-channel --update
 
 nix-shell '<home-manager>' -A install
-# Now you should be able to activate 'home-manager' 
+# Now you should be able to activate 'home-manager'
 
-# Setup home-manager file
-echo "Soft linking home.nix"
-rm ${HOME}/.config/home-manager/home.nix
-ln -s ${HOME}/.dotfiles/home-manager/home.nix ${HOME}/.config/home-manager/
+
+echo ". $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" >> $HOME/.profile
+
 
 # Setup fonts
 echo "Installing fonts!"
