@@ -1,8 +1,15 @@
-# Setup emacs files
-echo "Moving emacs .dotfiles"\\
-mkdir ${HOME}/.emacs.d
-mv ./emacs/* ${HOME}/.emacs.d/
+if [ ! -f "${HOME}/.dotfiles/setup.sh" ]; then
+  echo "ERROR: Make sure .dotfiles is in home directory"
+  exit 1
+fi
 
+# Setup emacs files
+echo "Soft linking emacs .dotfiles"\\
+mkdir ${HOME}/.emacs.d
+for file in emacs/*; do
+  echo "Soft linking ${file}"
+  ln -s ${HOME}/.dotfiles/"$file" ${HOME}/.emacs.d/"$(basename "$file")"
+done
 
 # Setup home-manager
 echo "Setting up home-manager"
@@ -17,11 +24,13 @@ nix-shell '<home-manager>' -A install
 # Now you should be able to activate 'home-manager' 
 
 # Setup home-manager file
-mv ./home-manager/home.nix ${HOME}/.config/home-manager/
+echo "Soft linking home.nix"
+rm ${HOME}/.config/home-manager/home.nix
+ln -s ${HOME}/.dotfiles/home-manager/home.nix ${HOME}/.config/home-manager/
 
 
 # Setup fonts
 echo "Installing fonts!"
 sudo mkdir /usr/share/fonts/berkeley-mono
-mv ./fonts/berkeley-mono/*.ttf /usr/share/fonts/berkeley-mono/
+sudo cp fonts/berkeley-mono/TTF/*.ttf /usr/share/fonts/berkeley-mono/
 sudo fc-cache -f
