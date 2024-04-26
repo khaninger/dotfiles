@@ -28,9 +28,13 @@ echo "Soft linking home.nix"
 rm ${HOME}/.config/home-manager/home.nix
 ln -s ${HOME}/.dotfiles/home-manager/home.nix ${HOME}/.config/home-manager/
 
-
 # Setup fonts
 echo "Installing fonts!"
 sudo mkdir /usr/share/fonts/berkeley-mono
 sudo cp fonts/berkeley-mono/TTF/*.ttf /usr/share/fonts/berkeley-mono/
 sudo fc-cache -f
+
+# Setup github ssh key
+echo "Generating a pub ssh key:"
+ssh-keygen -t rsa -b 4096 -C khaninger@gmail.com
+cat ~/.ssh/id_rsa.pub
