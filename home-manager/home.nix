@@ -47,11 +47,11 @@
   }; 
   programs.zsh = {
     enable = true;
-    oh-my-zsh = {    
-      enable = true;
-      plugins = [ "git" "thefuck" ];
-      theme = "robbyrussell";
-    };
+    #oh-my-zsh = {    
+    #  enable = true;
+    #  plugins = [ "git" ];
+    #  theme = "agnoster";
+    #};
 
     shellAliases = {
       ll = "ls -l";
@@ -60,6 +60,13 @@
     };
     history.size = 10000;
     history.path = "${config.xdg.dataHome}/zsh/history";
+  };
+  programs.starship = {
+    enable = true;
+    settings = {
+      add_newline = false;
+      format = "$directory$git_branch";
+    };
   };
 
   
