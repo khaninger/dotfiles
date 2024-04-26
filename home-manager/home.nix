@@ -48,6 +48,7 @@
   }; 
   programs.emacs = {
    enable = true;
+   package = pkgs.emacs29-pgtk;
    extraPackages = (
      epkgs: (with epkgs; [
        spacemacs-theme
@@ -67,5 +68,7 @@
     };
     history.size = 10000;
     history.path = "${config.xdg.dataHome}/zsh/history";
-};
+  };
+  
+  #wayland.windowManager.sway.enable = true;
 }
