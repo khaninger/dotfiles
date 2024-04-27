@@ -71,8 +71,7 @@ in
     enableCompletion = true;
     shellAliases = {
       ll = "ls -l";
-      em = "emacs -nw $1";
-      update = "sudo nixos-rebuild switch";
+      em = "emacsclient -a '' -nw $1";
     };
     history.size = 10000;
     history.path = "${config.xdg.dataHome}/zsh/history";
