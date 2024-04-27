@@ -73,6 +73,10 @@ in
       ll = "ls -l";
       em = "emacsclient -a '' -nw $1";
     };
+    initExtra = ''
+      bindkey '^[[1;5C' forward-word
+      bindkey '^[[1;5D' backward-word
+    '';
     history.size = 10000;
     history.path = "${config.xdg.dataHome}/zsh/history";
   };
