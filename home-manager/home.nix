@@ -8,6 +8,7 @@ let
     withWebP = true;
   };
   my-emacs-with-packages = (pkgs.emacsPackagesFor my-emacs).emacsWithPackages (epkgs: with epkgs; [
+    spacemacs-theme
     vterm
     pdf-tools
     treesit-grammars.with-all-grammars
@@ -22,18 +23,17 @@ in
   home.stateVersion = "23.11"; # Please read the comment before changing.
 
   home.packages = with pkgs;  [
-    # Dev
+    # Python
     ruff
     ruff-lsp
     python3Packages.python-lsp-server
-    
+
+    # Rust
     cargo
-    
+
+    # General dev
     tree-sitter
     emacs-all-the-icons-fonts
-    
-
-    
 
     # Misc
     ghostscript
@@ -59,12 +59,7 @@ in
   }; 
   programs.emacs = {
    enable = true;
-   #package = pkgs.emacs29;
    package = my-emacs-with-packages;
-   #package = pkgs.emacs-pgtk;
-   extraPackages = epkgs: [
-     epkgs.spacemacs-theme
-     ];
   }; 
   programs.zsh = {
     enable = true;
@@ -73,7 +68,7 @@ in
     #  plugins = [ "git" ];
     #  theme = "agnoster";
     #};
-
+    enableCompletion = true;
     shellAliases = {
       ll = "ls -l";
       em = "emacs -nw $1";
