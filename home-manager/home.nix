@@ -27,6 +27,8 @@ in
     ruff
     ruff-lsp
     python3Packages.python-lsp-server
+    python312Packages.pip
+    python312Packages.venv
 
     # Rust
     cargo
