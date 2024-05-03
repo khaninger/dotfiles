@@ -25,8 +25,9 @@
 (pixel-scroll-precision-mode 1)
 (advice-add 'help-window-display-message :around #'ignore)
 
-(set-face-attribute 'default nil :height 140)
-(set-frame-font "Berkeley Mono-12" nil t)
+;(set-face-attribute 'default nil :height 140)
+;(set-frame-font "Berkeley Mono-12" nil t) ;; Doesn't work daemon mode
+(add-to-list 'default-frame-alist '(font . "Berkeley Mono-14"))
 
 ;;;;;;;; Packages
 (require 'package)
@@ -347,11 +348,6 @@
  '(custom-safe-themes
    '("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
  '(ignored-local-variable-values '((eval ispell-change-dictionary "en_US")))
- '(lsp-completion-enable t nil nil "Customized with use-package lsp-mode")
- '(org-agenda-files
-   '("/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/adv_bsher.org" "/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/adv_hun.org" "/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/blog_autodiff_dyn_sys.org" "/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/blog_contact_models.org" "/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/blog_robot_business_models.org" "/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/misc_meetings.org" "/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/misc_mitarbeitergespraech.org" "/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/misc_pers_todos.org" "/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/misc_todos.org" "/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/paper_hri_mpc.org" "/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/proj_converging.org" "/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/proj_eneffnet.org" "/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/proj_somaro.org" "/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/ref_ideas.org" "/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/ref_programming_hints.org" "/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/ref_resources.org"))
- '(package-selected-packages
-   '(perspective rustic rust-mode tree-sitter-langs ligature lsp-ui lsp-mode esup projectile all-the-icons yasnippet ein company org-roam org-fancy-priorities org-fragtog spacemacs-theme org-superstar org-rich-yank org-roam-server pandoc-mode ox-pandoc org-roam-bibtex org-ref markdown-mode olivetti zygospore swiper-helm counsel ivy))
  '(warning-suppress-types '((use-package))))
 
 (custom-set-faces
