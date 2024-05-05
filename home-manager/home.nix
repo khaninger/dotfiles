@@ -28,7 +28,7 @@ in
     ruff-lsp
     python3Packages.python-lsp-server
     python312Packages.pip
-#    python312Packages.venv
+
 
     # Rust
     cargo
@@ -58,18 +58,19 @@ in
     enable = true;
     userName = "Kevin Haninger";
     userEmail = "khaninger@gmail.com";
-  }; 
+  };
+  programs.direnv = {
+    enable = true;
+    enableBashIntegration = true;
+    enableZshIntegration = true;
+    nix-direnv.enable = true;
+  };
   programs.emacs = {
    enable = true;
    package = my-emacs-with-packages;
   }; 
   programs.zsh = {
     enable = true;
-    #oh-my-zsh = {    
-    #  enable = true;
-    #  plugins = [ "git" ];
-    #  theme = "agnoster";
-    #};
     enableCompletion = true;
     shellAliases = {
       ll = "ls -l";
@@ -86,7 +87,7 @@ in
     enable = true;
     settings = {
       add_newline = false;
-      format = "$directory$git_branch$git_status$character";
+      format = "(\($virtualenv\))$directory$git_branch$git_status$character";
     };
   };
 
