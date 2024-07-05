@@ -59,6 +59,10 @@ in
     userName = "Kevin Haninger";
     userEmail = "khaninger@gmail.com";
   };
+  programs.ripgrep = { enable = true; };
+  programs.fd = { enable = true; };
+  #  programs.lsd = { enable = true; };
+  
   programs.direnv = {
     enable = true;
     enableBashIntegration = true;
@@ -75,6 +79,7 @@ in
     shellAliases = {
       ll = "ls -l";
       em = "emacsclient -a '' -nw $1";
+      nix = "nix --experimental-features flakes --extra-experimental-features nix-command";
     };
     initExtra = ''
       bindkey '^[[1;5C' forward-word
