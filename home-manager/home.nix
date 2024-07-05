@@ -54,11 +54,15 @@ in
   };
  
   programs.home-manager.enable = true;
+  
   programs.git = {
     enable = true;
     userName = "Kevin Haninger";
     userEmail = "khaninger@gmail.com";
+    delta.enable = true; # use the delta highlighter
   };
+
+  # Command line helpers
   programs.ripgrep = { enable = true; };
   programs.fd = { enable = true; };
   #  programs.lsd = { enable = true; };
