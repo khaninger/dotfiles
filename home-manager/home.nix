@@ -18,7 +18,7 @@ in
   targets.genericLinux.enable = true; # when not using NixOS
 
   home.username = "hanikevi";
-  home.homeDirectory = "/home/hanikevi";
+  home.homeDirectory = builtins.getEnv "HOME";
 
   home.stateVersion = "23.11"; # Please read the comment before changing.
 
@@ -28,7 +28,6 @@ in
     ruff-lsp
     python3Packages.python-lsp-server
     python312Packages.pip
-
 
     # Rust
     cargo
@@ -44,8 +43,8 @@ in
   # Manage home files
   home.file = {
     ".emacs.d" = {
-        source = "/home/hanikevi/.dotfiles/emacs";
-        recursive = true;
+      source = "${config.home.homeDirectory}/.dotfiles/emacs";
+      recursive = true;
     };
   };
 
