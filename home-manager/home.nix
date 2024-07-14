@@ -64,7 +64,6 @@ in
   # Command line helpers
   programs.ripgrep = { enable = true; };
   programs.fd = { enable = true; };
-  #  programs.lsd = { enable = true; };
   
   programs.direnv = {
     enable = true;
