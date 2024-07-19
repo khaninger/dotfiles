@@ -28,7 +28,8 @@ in
     ruff-lsp
     python3Packages.python-lsp-server
     python312Packages.pip
-
+    poetry
+    
     # Rust
     cargo
 
