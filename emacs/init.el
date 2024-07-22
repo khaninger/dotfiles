@@ -1,7 +1,9 @@
 ;;;;;; File system
-(setq default-directory "/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/")
-(setq user-emacs-directory "/home/hanikevi/.emacs.d/")
-    (setq org-directory "/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/")
+(setq default-directory (if (file-directory-p "/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/")
+                            "/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/"
+                            "~/"))
+;(setq user-emacs-directory "/home/hanikevi/.emacs.d/")
+(setq org-directory default-directory)
 (setq export-directory-custom "/mnt/c/Users/hanikevi/Desktop/")
 (setq org-archive-location (concat org-directory "archived/%s_archive::"))
 (setq auto-save-file-name-transforms
