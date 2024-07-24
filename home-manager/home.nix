@@ -39,6 +39,7 @@ in
 
     # Misc
     ghostscript
+    ffmpeg
   ];
 
   # Manage home files
@@ -60,6 +61,10 @@ in
     userName = "Kevin Haninger";
     userEmail = "khaninger@gmail.com";
     delta.enable = true; # use the delta highlighter
+    extraConfig = {
+      http.postBuffer = 157286400;
+      pull.rebase = false;
+    };
   };
 
   # Command line helpers
@@ -72,6 +77,7 @@ in
     enableZshIntegration = true;
     nix-direnv.enable = true;
   };
+  
   programs.emacs = {
    enable = true;
    package = my-emacs-with-packages;
