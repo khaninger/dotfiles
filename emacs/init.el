@@ -74,7 +74,6 @@
   ;; per mode with `ligature-mode'.
   (global-ligature-mode t)) 
 
-
 (use-package perspective
   :bind
   ("C-x C-b" . persp-list-buffers)         ; or use a nicer switcher, see below
@@ -106,8 +105,14 @@
   :config
   (dashboard-setup-startup-hook)
 )
+
 (use-package all-the-icons :ensure)
- 
+
+;; Cut/copy from terminal
+(use-package xclip
+  :ensure t
+  :config (xclip-mode))
+
 ;; Rust IDE Config
 (use-package rustic :ensure)
 

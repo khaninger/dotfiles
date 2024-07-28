@@ -12,6 +12,7 @@ let
     vterm
     pdf-tools
     treesit-grammars.with-all-grammars
+    xclip
   ]);
 in
 {
@@ -26,10 +27,9 @@ in
     # Python
     ruff
     ruff-lsp
-    python3Packages.python-lsp-server
-    python312Packages.pip
     poetry
-    
+    python3Packages.python-lsp-server
+
     # Rust
     cargo
 
@@ -40,6 +40,15 @@ in
     # Misc
     ghostscript
     ffmpeg
+    htop
+    usbtop
+
+    (writeShellScriptBin "video_reencode_kazam_ppt" ''
+      for file in *.mp4; do
+          ffmpeg -i "$file" -c:v libx264 -pix_fmt yuv420p -crf 23 -c:a copy "$file"_yuv420p.mp4
+      done
+    '')
+
   ];
 
   # Manage home files
@@ -101,6 +110,7 @@ in
     enable = true;
     settings = {
       add_newline = false;
+      git_branch.truncation_length = 10;
       format = "(\($virtualenv\))$directory$git_branch$git_status$character";
     };
   };
