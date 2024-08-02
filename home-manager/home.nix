@@ -33,15 +33,18 @@ in
     # Rust
     cargo
 
+    # Nix
+    nixd
+    
     # General dev
     tree-sitter
     emacs-all-the-icons-fonts
 
     # Misc
     ghostscript
+    poppler_utils #pdffonts
     ffmpeg
     htop
-    usbtop
 
     (writeShellScriptBin "video_reencode_kazam_ppt" ''
       for file in *.mp4; do

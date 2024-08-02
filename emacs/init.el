@@ -119,6 +119,7 @@
 ;; NIX  IDE config
 (use-package nix-mode :ensure)
 
+
 ;;;;;; General IDE Config
 (use-package projectile)
 
@@ -132,7 +133,12 @@
   (setq lsp-idle-delay 0.5
         lsp-enable-symbol-ighlighting t
         lsp-headerline-breadcrumb-enable nil)
+  (lsp-register-client (make-lsp-client :new-connection (lsp-stdio-connection "nixd")
+                                        :major-modes '(nix-mode)
+                                        :priority 0
+                                        :server-id 'nixd))
   :hook (python-ts-mode . lsp-deferred) ;; rust lsp hooks set in rustic
+  :hook (nix-mode . lsp-deferred) 
 )
 
 (use-package lsp-ui
