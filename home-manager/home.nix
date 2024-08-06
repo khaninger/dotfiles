@@ -45,7 +45,8 @@ in
     poppler_utils #pdffonts
     ffmpeg
     htop
-
+    usbtop # also needs sudo modprobe usbmon
+    
     (writeShellScriptBin "video_reencode_kazam_ppt" ''
       for file in *.mp4; do
           ffmpeg -i "$file" -c:v libx264 -pix_fmt yuv420p -crf 23 -c:a copy "$file"_yuv420p.mp4
