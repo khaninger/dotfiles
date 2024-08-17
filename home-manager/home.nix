@@ -15,6 +15,8 @@ let
     xclip
     lsp-mode
     flycheck
+    projectile
+    xclip # copy-paste in terminal
   ]);
 in
 {
@@ -38,18 +40,25 @@ in
     # Nix
     nixd # includes nix-tree
     
-    
     # General dev
     tree-sitter
     emacs-all-the-icons-fonts
 
     # Misc
     ghostscript
-    poppler_utils #pdffonts
+    poppler_utils # pdffonts, check for type 3
     ffmpeg
     htop
-    usbtop # also needs sudo modprobe usbmon
+    usbtop # also needs `sudo modprobe usbmon`
+    dua # disk usage, `dua i`  for interactive
+
+
+    # Compress the pdf main.pdf
+    (writeShellScriptBin "compress_main_pdf" ''
+      gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dNOPAUSE -dQUIET -  dBATCH -dPDFSETTINGS=/printer -dPrinted=false -sOutputFile=compressed.pdf main.pdf
+    '')
     
+    # The videos from kazaam screen record cant be imported to ppt
     (writeShellScriptBin "video_reencode_kazam_ppt" ''
       for file in *.mp4; do
           ffmpeg -i "$file" -c:v libx264 -pix_fmt yuv420p -crf 23 -c:a copy "$file"_yuv420p.mp4
@@ -102,7 +111,9 @@ in
     enable = true;
     enableCompletion = true;
     shellAliases = {
-      ll = "ls -l";
+      test_ls = "ls";
+      ls = "ls --color=auto";
+      ll = "ls -l --color=auto";
       em = "emacsclient -a '' -nw $1";
       nix = "nix --experimental-features flakes --extra-experimental-features nix-command";
     };
@@ -115,13 +126,12 @@ in
   };
   programs.starship = {
     enable = true;
+    enableZshIntegration = true;
+    enableBashIntegration = true;
     settings = {
       add_newline = false;
       git_branch.truncation_length = 10;
       format = "(\($virtualenv\))$directory$git_branch$git_status$character";
     };
   };
-
-  
-  
 }
