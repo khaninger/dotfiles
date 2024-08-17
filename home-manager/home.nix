@@ -13,6 +13,8 @@ let
     pdf-tools
     treesit-grammars.with-all-grammars
     xclip
+    lsp-mode
+    flycheck
   ]);
 in
 {
@@ -34,7 +36,8 @@ in
     cargo
 
     # Nix
-    nixd
+    nixd # includes nix-tree
+    
     
     # General dev
     tree-sitter

@@ -131,20 +131,26 @@
   :commands (lsp lsp-deferred)
   :config
   (setq lsp-idle-delay 0.5
-        lsp-enable-symbol-ighlighting t
-        lsp-headerline-breadcrumb-enable nil)
+        lsp-enable-symbol-highlighting t
+        lsp-headerline-breadcrumb-enable nil
+        lsp-pylsp-plugins-ruff-enabled t)
   (lsp-register-client (make-lsp-client :new-connection (lsp-stdio-connection "nixd")
                                         :major-modes '(nix-mode)
                                         :priority 0
                                         :server-id 'nixd))
-  :hook (python-ts-mode . lsp-deferred) ;; rust lsp hooks set in rustic
-  :hook (nix-mode . lsp-deferred) 
-)
+  ;; rust lsp hooks set in rustic
+  :hook (python-ts-mode . lsp-deferred)
+  :hook (nix-mode . lsp-deferred))
+
+(use-package flycheck
+  :ensure t
+  :hook (lsp-mode . global-flycheck-mode))
 
 (use-package lsp-ui
   :hook (lsp-mode . lsp-ui-mode)
-  :custom
-  (lsp-ui-doc-position 'bottom))
+  :config
+  (setq lsp-ui-doc-position 'bottom
+        lsp-ui-flycheck-enable t))
 
 (use-package company
   :after lsp-mode
