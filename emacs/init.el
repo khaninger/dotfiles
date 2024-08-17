@@ -26,9 +26,14 @@
 (setq-default indent-tabs-mode nil)
 (setq-default pop-up-windows nil)
 (setq-default pixel-scroll-precision-mode 1)
+(setq-default mode-line-format '("%e" mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification " L%l " (vc-mode vc-mode)))
+
+
 (advice-add 'help-window-display-message :around #'ignore)
 
-(setq-default global-tab-line-mode 1)
+
+(global-tab-line-mode)
+
 ;; Fonts
 (add-to-list 'default-frame-alist '(font . "Berkeley Mono-14"))
 
