@@ -20,15 +20,16 @@
 (setq-default sentence-end-double-space nil) ;; Sentence division on double space
 (setq-default show-paren-mode 1)             ;; Turn on highlighting ()
 (setq-default normal-erase-is-backspace-mode 1) ;; Ctrl-backspace work in terminal mode
+(setq-default initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 
 ;; General appearance
 (setq-default indent-tabs-mode nil)
 (setq-default pop-up-windows nil)
-(pixel-scroll-precision-mode 1)
+(setq-default pixel-scroll-precision-mode 1)
 (advice-add 'help-window-display-message :around #'ignore)
 
-;(set-face-attribute 'default nil :height 140)
-;(set-frame-font "Berkeley Mono-12" nil t) ;; Doesn't work daemon mode
+(setq-default global-tab-line-mode 1)
+;; Fonts
 (add-to-list 'default-frame-alist '(font . "Berkeley Mono-14"))
 
 ;;;;;;;; Packages
@@ -74,17 +75,6 @@
   ;; per mode with `ligature-mode'.
   (global-ligature-mode t)) 
 
-(use-package perspective
-  :bind
-  ("C-x C-b" . persp-list-buffers)         ; or use a nicer switcher, see below
-  ("C-x b" . persp-switch-to-buffer*)
-  ("C-x k" . persp-kill-buffer*)
-  :custom
-  (persp-mode-prefix-key (kbd "C-c C-p"))  ; pick your own prefix key here
-  :init
-  (persp-mode)
-  )
-
 (use-package dashboard
   :diminish dashboard-mode
   :custom
@@ -94,7 +84,7 @@
                                dashboard-insert-newline
                                dashboard-insert-items
                                dashboard-insert-newline))
-  (dashboard-items '((recents . 10) (bookmarks . 10) (projects . 5)))
+  (dashboard-items '((recents . 10) (projects . 8) (bookmarks . 10)))
   (dashboard-icon-type 'all-the-icons)
   (dashboard-set-heading-icons t)
   (dashboard-set-file-icons t)
@@ -104,6 +94,7 @@
                                     :height 2.4))))
   :config
   (dashboard-setup-startup-hook)
+  (setq dashboard-projects-backend 'projectile)
 )
 
 (use-package all-the-icons :ensure)
@@ -119,9 +110,15 @@
 ;; NIX  IDE config
 (use-package nix-mode :ensure)
 
-
 ;;;;;; General IDE Config
-(use-package projectile)
+(use-package projectile
+  :ensure
+  :config
+  (projectile-mode 1)
+  (setq projectile-project-search-path '("~/"))
+  :bind
+  ("C-c p" . projectile-command-map)
+  )
 
 (use-package treesit-auto
   :config
@@ -188,10 +185,8 @@
   (org-default-notes-file (concat org-directory "\misc_todos.org"))
   (org-capture-templates
       '(("t" "TODO" entry (file+headline "misc_todos.org" "Captured")
-         "** TODO %? %^G %^{CATEGORY}p")
-        ("s" "Staged TODO" entry (file+headline "misc_todos.org" "Captured")
-         "** STAGED %?")
-        ("p" "Personal TODO" entry (file+headline "misc_personal_todos.org" "Captured")
+         "** TODO %?")
+        ("p" "Personal TODO" entry (file+headline "misc_pers_todos.org" "Captured")
          "** STAGED %?")))
   
   ;; Export
