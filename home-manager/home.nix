@@ -55,7 +55,7 @@ in
 
     # Compress the pdf main.pdf
     (writeShellScriptBin "compress_main_pdf" ''
-      gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dNOPAUSE -dQUIET -  dBATCH -dPDFSETTINGS=/printer -dPrinted=false -sOutputFile=compressed.pdf main.pdf
+      gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dNOPAUSE -dQUIET -dBATCH -dPDFSETTINGS=/printer -dPrinted=false -sOutputFile=compressed.pdf main.pdf
     '')
     
     # The videos from kazaam screen record cant be imported to ppt
