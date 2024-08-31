@@ -7,7 +7,7 @@
   (setq org-agenda-start-on-weekday nil)
   (setq org-deadline-warning-days 0)
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "BLOCKED(b)" "STAGED(s)" "DELEGATED(e)" "|" "DONE(d)" "DROPPED(r@)" "STATUS(u)")))
+        '((sequence "TODO(t)" "BLOCKED(b@)" "STAGED(s)" "DELEGATED(e)" "|" "DONE(d)" "DROPPED(r@)")))
   (setq org-log-states-order-reversed t)
   (setq org-log-done t)
   (setq org-log-mode-items '(closed clock state))

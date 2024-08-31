@@ -112,9 +112,12 @@
 (use-package all-the-icons :ensure)
 
 ;; Cut/copy from terminal
-(use-package xclip
-  :ensure t
-  :config (xclip-mode))
+;(use-package xclip
+;  :ensure t
+;  :config (xclip-mode))
+(use-package clipetty
+  :hook (after-init . global-clipetty-mode))
+
 
 ;; Rust IDE Config
 (use-package rustic :ensure)

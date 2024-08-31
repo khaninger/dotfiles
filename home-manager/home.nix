@@ -16,7 +16,8 @@ let
     lsp-mode
     flycheck
     projectile
-    xclip # copy-paste in terminal
+    #xclip # copy-paste in terminal
+    clipetty
   ]);
 in
 {
@@ -89,6 +90,7 @@ in
     extraConfig = {
       http.postBuffer = 157286400;
       pull.rebase = false;
+      init.defaultBranch = "main";
     };
   };
 
