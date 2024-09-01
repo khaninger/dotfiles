@@ -21,7 +21,7 @@ let
   ]);
 in
 {
-  targets.genericLinux.enable = true; # when not using NixOS
+  targets.genericLinux.enable = true; # when not using Nix
 
   home.username = builtins.getEnv "USER";
   home.homeDirectory = builtins.getEnv "HOME";
@@ -50,9 +50,10 @@ in
     poppler_utils # pdffonts, check for type 3
     ffmpeg
     htop
+    btop # prettier htop
     usbtop # also needs `sudo modprobe usbmon`
     dua # disk usage, `dua i`  for interactive
-
+    xdg-utils # xdg-open for links
 
     # Compress the pdf main.pdf
     (writeShellScriptBin "compress_main_pdf" ''
@@ -64,6 +65,20 @@ in
       for file in *.mp4; do
           ffmpeg -i "$file" -c:v libx264 -pix_fmt yuv420p -crf 23 -c:a copy "$file"_yuv420p.mp4
       done
+    '')
+
+    # Open the remote of a git repo in browser
+    (writeShellScriptBin "open_remote" ''
+      remote_url=$(git config --get remote.origin.url)
+      if [ -z "$remote_url" ]; then
+       echo "Error: No remote URL found"
+       exit 1
+      fi
+      if [[ $remote_url == git@* ]]; then
+       remote_url=$(echo $remote_url | sed 's/:/\//g' | sed 's/git@/https:\/\//g')
+      fi
+      xdg-open "$remote_url"
+      echo "Opened $remote_url in your default browser"
     '')
 
   ];
