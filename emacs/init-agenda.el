@@ -2,7 +2,8 @@
   ;; Org Agenda  
   (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
   (setq org-use-fast-todo-selection 'expert)
-  (setq org-agenda-files (directory-files org-directory nil "\\.org$"))
+  ;;(setq org-agenda-files (directory-files org-directory nil "\\.org$"))
+  (setq org-agenda-files (list (concat org-directory "misc_todos.org")))
   ;;(setq org-agenda-files (list org-directory))
   (setq org-agenda-start-on-weekday nil)
   (setq org-deadline-warning-days 0)
@@ -12,15 +13,15 @@
   (setq org-log-done t)
   (setq org-log-mode-items '(closed clock state))
   (setq org-agenda-prefix-format
-        '((agenda . " %i %-8c %-12(kevin/get-highest-tag)")
-          (todo .   " %i %-8c %-12(kevin/get-highest-tag)")
-          (tags .   " %i %-8c %-12(kevin/format-filename-for-agenda)")
-          (search . " %i %-8c %-12(kevin/format-filename-for-agenda)")))
+        '((agenda . " %i %-9(kevin/get-highest-tag) %-14T")
+          ;(todo . " %i %-20:b \n    ")
+          (todo .   " %i %-9(kevin/get-highest-tag) %-14T")
+          (tags .   " %i %-12(kevin/format-filename-for-agenda)")
+          (search . " %i %-12(kevin/format-filename-for-agenda)")))
   ;;(setq org-agenda-todo-ignore-scheduled 'future)
   (setq org-agenda-show-inherited-tags 'always)
   (setq org-use-property-inheritance t)
   (setq org-agenda-tags-todo-honor-ignore-options nil)
-
   (setq org-refile-targets
         '((org-agenda-files :maxlevel . 2)))
   (setq org-refile-use-outline-path 'file)

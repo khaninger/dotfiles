@@ -94,99 +94,100 @@ in
   home.sessionVariables = {
     EDITOR = "emacs";
   };
- 
-  programs.home-manager.enable = true;
-  
-  programs.git = {
-    enable = true;
-    userName = "Kevin Haninger";
-    userEmail = "khaninger@gmail.com";
-    delta.enable = true; # use the delta highlighter
-    extraConfig = {
-      http.postBuffer = 157286400;
-      pull.rebase = false;
-      init.defaultBranch = "main";
-    };
-  };
 
-  # Command line helpers
-  programs.ripgrep = { enable = true; };
-  programs.fd = { enable = true; };
-  
-  programs.direnv = {
-    enable = true;
-    enableBashIntegration = true;
-    enableZshIntegration = true;
-    nix-direnv.enable = true;
-  };
-  
-  programs.emacs = {
-   enable = true;
-   package = my-emacs-with-packages;
-  };
-  
-  programs.zsh = {
-    enable = true;
-    enableCompletion = true;
-    shellAliases = {
-      ls = "ls --color=auto";
-      ll = "ls -l --color=auto";
-      em = "emacsclient -a '' -nw $1";
-      nix = "nix --experimental-features flakes --extra-experimental-features nix-command";
-      ga = "git add";
-      gc = "git commit";
-      gco = "git checkout";
-      gl = "git prettylog";
-      gp = "git push";
+  programs = rec {
+    home-manager.enable = true;
+    
+    emacs = {
+     enable = true;
+     package = my-emacs-with-packages;
     };
-    syntaxHighlighting.enable = true;
-    initExtra = ''
-      bindkey '^[[1;5C' forward-word
-      bindkey '^[[1;5D' backward-word
-    '';
-    history = {
-      size = 10000;
-      path = "$HOME/.bash_history";
+
+    git = {
+      enable = true;
+      userName = "Kevin Haninger";
+      userEmail = "khaninger@gmail.com";
+      delta.enable = true; # use the delta highlighter
+      extraConfig = {
+        http.postBuffer = 157286400;
+        pull.rebase = false;
+        init.defaultBranch = "main";
+      };
     };
-  };
-  programs.bash = {
-    enable = true;
-    shellAliases =  {
-      ls = "ls --color=auto";
-      ll = "ls -l --color=auto";
-      em = "emacsclient -a '' -nw $1";
-      nix = "nix --experimental-features flakes --extra-experimental-features nix-command";
-      ga = "git add";
-      gc = "git commit";
-      gco = "git checkout";
-      gl = "git prettylog";
-      gp = "git push";
+
+    # Command line helpers
+    ripgrep = { enable = true; };
+    fd = { enable = true; };
+
+    direnv = {
+      enable = true;
+      enableBashIntegration = true;
+      enableZshIntegration = true;
+      nix-direnv.enable = true;
     };
-  };
-  programs.starship = {
-    enable = true;
-    enableZshIntegration = true;
-    enableBashIntegration = true;
-    settings = {
-      add_newline = false;
-      format = "$virtualenv$direnv$nix_shell$directory$git_branch$git_status$character";
-      git_branch = {
-        truncation_length = 10;
-        format = "[$symbol$branch(:$remote_branch)]($style) ";
+
+    # Shells
+    zsh = {
+      enable = true;
+      enableCompletion = true;
+      shellAliases = {
+        ls = "ls --color=auto";
+        ll = "ls -l --color=auto";
+        em = "emacsclient -a '' -nw $1";
+        nix = "nix --experimental-features flakes --extra-experimental-features nix-command";
+        ga = "git add";
+        gc = "git commit -m";
+        gco = "git checkout";
+        gl = "git prettylog";
+        gp = "git push";
+        ".." = "cd ..";
       };
-      direnv = {
-        disabled = false;
-        unloaded_msg = "";
-        loaded_msg = "direnv ";
-        format = "[$loaded]($style)";
+      syntaxHighlighting.enable = true;
+      initExtra = ''
+        bindkey '^[[1;5C' forward-word
+        bindkey '^[[1;5D' backward-word
+      '';
+      history = {
+        size = 10000;
+        append = true;
+        ignorePatterns = ["ls" "cd" "exit"];
+        ignoreAllDups = true;
+        extended = false;
+        path = "$HOME/.bash_history";
       };
-      nix_shell = {
-        format = "[$symbol]($style) ";
-        symbol = "❄️";
-      };
-      git_status = {
-        stashed = ""; # basically always have a stash
-        style = "bold purple";
+    };
+    bash = {
+      enable = true;
+      shellAliases = zsh.shellAliases;
+      historyFile = zsh.history.path;
+      historyIgnore = zsh.history.ignorePatterns;
+      historyControl = ["ignoreboth"]; # duplicates and with leading space
+    };
+  starship = {
+      enable = true;
+      enableZshIntegration = true;
+      enableBashIntegration = true;
+      settings = {
+        add_newline = false;
+        format = "$virtualenv$direnv$nix_shell$directory$git_branch$git_status$character";
+        git_branch = {
+          truncation_length = 10;
+          format = "[$symbol$branch(:$remote_branch)]($style) ";
+        };
+        direnv = {
+          disabled = false;
+          unloaded_msg = "";
+          loaded_msg = "direnv ";
+          format = "[$loaded]($style)";
+        };
+        nix_shell = {
+          format = "[$symbol]($style) ";
+          symbol = "❄️";
+        };
+        git_status = {
+          stashed = ""; # basically always have a stash
+          style = "bold purple";
+        };
       };
     };
   };
