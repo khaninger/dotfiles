@@ -146,16 +146,20 @@ in
       initExtra = ''
         bindkey '^[[1;5C' forward-word
         bindkey '^[[1;5D' backward-word
+        setopt incappendhistory
+        function vterm_printf() { printf "\e]%s\e\\" "$1" }      
+        vterm_prompt_end() { vterm_printf "51;A$(whoami)@$(hostname):$(pwd)" }
+        starship_precmd_user_func="vterm_prompt_end"
       '';
       history = {
         size = 10000;
-        #share = true; # this forces timesteps
         ignorePatterns = ["ls" "cd" "exit"];
         ignoreAllDups = true;
         extended = false;
+        share = false; # true forces timesteps in history file
         path = "$HOME/.bash_history";
       };
-      profileExtra = "setopt incappendhistory";
+      profileExtra = ''''; # .profile not sourced by vterm in emacs! 
     };
     bash = {
       enable = true;
@@ -163,6 +167,16 @@ in
       historyFile = zsh.history.path;
       historyIgnore = zsh.history.ignorePatterns;
       historyControl = ["ignoreboth"]; # duplicates and with leading space
+      initExtra = ''
+      vterm_printf() {
+        printf "\e]%s\e\\" "$1"
+      }      
+      
+      vterm_prompt_end() {
+        vterm_printf "51;A$(whoami)@$(hostname):$(pwd)"
+      }
+      starship_precmd_user_func="vterm_prompt_end"; 
+      '';
     };
   starship = {
       enable = true;
@@ -170,10 +184,10 @@ in
       enableBashIntegration = true;
       settings = {
         add_newline = false;
-        format = "$virtualenv$direnv$nix_shell$directory$git_branch$git_status$character";
+        format = "($virtualenv$direnv$nix_shell)$directory$git_branch$git_status$character";
         git_branch = {
           truncation_length = 10;
-          format = "[$symbol$branch(:$remote_branch)]($style) ";
+          format = "[$symbol$branch(:$remote_branch)]($style)";
         };
         direnv = {
           disabled = false;
@@ -182,8 +196,8 @@ in
           format = "[$loaded]($style)";
         };
         nix_shell = {
-          format = "[$symbol]($style) ";
-          symbol = "❄️";
+          format = "[$symbol]($style)";
+          symbol = "❄️ ";
         };
         git_status = {
           stashed = ""; # basically always have a stash
