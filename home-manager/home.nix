@@ -123,23 +123,45 @@ in
   programs.emacs = {
    enable = true;
    package = my-emacs-with-packages;
-  }; 
+  };
+  
   programs.zsh = {
     enable = true;
     enableCompletion = true;
     shellAliases = {
-      test_ls = "ls";
       ls = "ls --color=auto";
       ll = "ls -l --color=auto";
       em = "emacsclient -a '' -nw $1";
       nix = "nix --experimental-features flakes --extra-experimental-features nix-command";
+      ga = "git add";
+      gc = "git commit";
+      gco = "git checkout";
+      gl = "git prettylog";
+      gp = "git push";
     };
+    syntaxHighlighting.enable = true;
     initExtra = ''
       bindkey '^[[1;5C' forward-word
       bindkey '^[[1;5D' backward-word
     '';
-    history.size = 10000;
-    history.path = "${config.xdg.dataHome}/zsh/history";
+    history = {
+      size = 10000;
+      path = "$HOME/.bash_history";
+    };
+  };
+  programs.bash = {
+    enable = true;
+    shellAliases =  {
+      ls = "ls --color=auto";
+      ll = "ls -l --color=auto";
+      em = "emacsclient -a '' -nw $1";
+      nix = "nix --experimental-features flakes --extra-experimental-features nix-command";
+      ga = "git add";
+      gc = "git commit";
+      gco = "git checkout";
+      gl = "git prettylog";
+      gp = "git push";
+    };
   };
   programs.starship = {
     enable = true;
@@ -147,8 +169,25 @@ in
     enableBashIntegration = true;
     settings = {
       add_newline = false;
-      git_branch.truncation_length = 10;
-      format = "(\($virtualenv\))$directory$git_branch$git_status$character";
+      format = "$virtualenv$direnv$nix_shell$directory$git_branch$git_status$character";
+      git_branch = {
+        truncation_length = 10;
+        format = "[$symbol$branch(:$remote_branch)]($style) ";
+      };
+      direnv = {
+        disabled = false;
+        unloaded_msg = "";
+        loaded_msg = "direnv ";
+        format = "[$loaded]($style)";
+      };
+      nix_shell = {
+        format = "[$symbol]($style) ";
+        symbol = "❄️";
+      };
+      git_status = {
+        stashed = ""; # basically always have a stash
+        style = "bold purple";
+      };
     };
   };
 }
