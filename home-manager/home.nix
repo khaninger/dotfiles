@@ -146,9 +146,13 @@ in
       initExtra = ''
         bindkey '^[[1;5C' forward-word
         bindkey '^[[1;5D' backward-word
+
+        # Not exposed via home-manager, but needed to keep zsh history updated online
         setopt incappendhistory
+       
+        # Keep vterm directory sync with emacs
         function vterm_printf() { printf "\e]%s\e\\" "$1" }      
-        vterm_prompt_end() { vterm_printf "51;A$(whoami)@$(hostname):$(pwd)" }
+        function vterm_prompt_end() { vterm_printf "51;A$(whoami)@$(hostname):$(pwd)" }
         starship_precmd_user_func="vterm_prompt_end"
       '';
       history = {
@@ -168,10 +172,13 @@ in
       historyIgnore = zsh.history.ignorePatterns;
       historyControl = ["ignoreboth"]; # duplicates and with leading space
       initExtra = ''
+      # Write immediately to bash history
+      PROMPT_COMMAND="history -a;history -n;$PROMPT_COMMAND"
+
+      # Keep vterm directory sync with emacs
       vterm_printf() {
         printf "\e]%s\e\\" "$1"
       }      
-      
       vterm_prompt_end() {
         vterm_printf "51;A$(whoami)@$(hostname):$(pwd)"
       }
@@ -186,13 +193,14 @@ in
         add_newline = false;
         format = "($virtualenv$direnv$nix_shell)$directory$git_branch$git_status$character";
         git_branch = {
+          symbol = "";
           truncation_length = 10;
           format = "[$symbol$branch(:$remote_branch)]($style)";
         };
         direnv = {
           disabled = false;
           unloaded_msg = "";
-          loaded_msg = "direnv ";
+          loaded_msg = "☥";
           format = "[$loaded]($style)";
         };
         nix_shell = {
@@ -200,6 +208,7 @@ in
           symbol = "❄️ ";
         };
         git_status = {
+          format = "([\\[$all_status$ahead_behind\\]]($style))";
           stashed = ""; # basically always have a stash
           style = "bold purple";
         };
