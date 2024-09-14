@@ -149,12 +149,13 @@ in
       '';
       history = {
         size = 10000;
-        append = true;
+        #share = true; # this forces timesteps
         ignorePatterns = ["ls" "cd" "exit"];
         ignoreAllDups = true;
         extended = false;
         path = "$HOME/.bash_history";
       };
+      profileExtra = "setopt incappendhistory";
     };
     bash = {
       enable = true;
