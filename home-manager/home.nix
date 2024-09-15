@@ -94,7 +94,7 @@ in
   home.sessionVariables = {
     EDITOR = "emacs";
   };
-
+  
   programs = rec {
     home-manager.enable = true;
     
@@ -151,9 +151,11 @@ in
         setopt incappendhistory
        
         # Keep vterm directory sync with emacs
-        function vterm_printf() { printf "\e]%s\e\\" "$1" }      
-        function vterm_prompt_end() { vterm_printf "51;A$(whoami)@$(hostname):$(pwd)" }
-        starship_precmd_user_func="vterm_prompt_end"
+        #function vterm_printf() { printf "\e]%s\e\\" "$1" }
+        function vterm_printf() { printf "%s" "$1" }
+        function starship_preprompt_user_func() { print "51;A$(whoami)@$(hostname):$(pwd)" }
+        export -f starship_preprompt_user_func
+#starship_preprompt_user_func="vterm_prompt_end"
       '';
       history = {
         size = 10000;
@@ -173,7 +175,7 @@ in
       historyControl = ["ignoreboth"]; # duplicates and with leading space
       initExtra = ''
       # Write immediately to bash history
-      PROMPT_COMMAND="history -a;history -n;$PROMPT_COMMAND"
+      #PROMPT_COMMAND="history -a;history -n;$PROMPT_COMMAND"
 
       # Keep vterm directory sync with emacs
       vterm_printf() {

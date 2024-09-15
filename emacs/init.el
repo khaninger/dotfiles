@@ -28,7 +28,8 @@
 (setq-default sentence-end-double-space nil) ;; Sentence division on double space
 (setq-default show-paren-mode 1)             ;; Turn on highlighting ()
 (setq-default normal-erase-is-backspace-mode 1) ;; Ctrl-backspace work in terminal mode
-(setq-default vterm-shell "$SHELL -l")   ;; for zsh to load interactively
+                                        ;(setq-default vterm-shell "$SHELL -l")   ;; for zsh to load interactively
+(setq-default vterm-shell "bash -l")   ;; for zsh to load interactively
 (setq-default initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 
 ;; General appearance
