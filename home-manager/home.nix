@@ -142,7 +142,7 @@ in
         gp = "git push";
         ".." = "cd ..";
       };
-      syntaxHighlighting.enable = true;
+      syntaxHighlighting.enable = false;
       initExtra = ''
         bindkey '^[[1;5C' forward-word
         bindkey '^[[1;5D' backward-word
@@ -152,10 +152,10 @@ in
        
         # Keep vterm directory sync with emacs
         #function vterm_printf() { printf "\e]%s\e\\" "$1" }
-        function vterm_printf() { printf "%s" "$1" }
-        function starship_preprompt_user_func() { print "51;A$(whoami)@$(hostname):$(pwd)" }
-        export -f starship_preprompt_user_func
-#starship_preprompt_user_func="vterm_prompt_end"
+        #function vterm_printf() { printf "%s" "$1" }
+        #function starship_preprompt_user_func() { print "51;A$(whoami)@$(hostname):$(pwd)" }
+        #starship_preprompt_user_func="starship_preprompt_user_func"
+        #starship_preprompt_user_func="vterm_prompt_end"
       '';
       history = {
         size = 10000;
@@ -165,7 +165,7 @@ in
         share = false; # true forces timesteps in history file
         path = "$HOME/.bash_history";
       };
-      profileExtra = ''''; # .profile not sourced by vterm in emacs! 
+      #profileExtra = ''''; # .profile not sourced by vterm in emacs! 
     };
     bash = {
       enable = true;
