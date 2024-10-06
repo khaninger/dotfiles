@@ -40,7 +40,6 @@
 
 
 (advice-add 'help-window-display-message :around #'ignore)
-
 (global-tab-line-mode)
 
 ;; Fonts
@@ -330,6 +329,9 @@
 ;; Navigating
 (global-set-key (kbd "<M-down>") #'scroll-down-line)
 (global-set-key (kbd "<M-up>") #'scroll-up-line)
+(global-set-key (kbd "C-x p") 'switch-to-prev-buffer)
+(global-set-key (kbd "<C-tab>") 'next-buffer)
+(global-set-key (kbd "<C-S-tab>") 'previous-buffer)
 
 
 ;; Org-roam

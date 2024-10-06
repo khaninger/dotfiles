@@ -113,6 +113,7 @@ in
         pull.rebase = false;
         init.defaultBranch = "main";
       };
+      ignores = [ " **/__pycache__/" "*.pyc" ".venv" ];
     };
 
     # Command line helpers
