@@ -118,7 +118,10 @@ in
 
     # Command line helpers
     ripgrep = { enable = true; };
-    fd = { enable = true; };
+    fd = {
+      enable = true;
+      ignores = [".git" ".direnv" ".venv" ".local" "*.pyc" "__pycache__"];
+    };
 
     direnv = {
       enable = true;
@@ -127,6 +130,15 @@ in
       nix-direnv.enable = true;
     };
 
+    fzf = {
+      enable = true;
+      enableBashIntegration = true;
+      enableZshIntegration = true;
+      defaultCommand = "fd --type f";
+      changeDirWidgetCommand = "fd --type d";
+      fileWidgetCommand = "fd --type f";
+    };
+    
     # Shells
     zsh = {
       enable = true;
