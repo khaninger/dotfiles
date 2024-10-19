@@ -31,6 +31,16 @@
                                         ;(setq-default vterm-shell "$SHELL -l")   ;; for zsh to load interactively
 (setq-default vterm-shell "bash -l")   ;; for zsh to load interactively
 (setq-default initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+(setq-default server-client-instructions nil)  ;;  prevent help instructions on  server client start
+
+
+;; Closing
+(defun close-all-buffers-on-frame-delete (frame)
+  "Close all buffers when a frame is deleted."
+    (dolist (buffer (buffer-list))
+      (unless  (string-equal (buffer-name buffer) "*dashboard*")
+        (kill-buffer buffer))))
+(add-hook 'delete-frame-functions 'close-all-buffers-on-frame-delete)
 
 ;; General appearance
 (setq-default indent-tabs-mode nil)
