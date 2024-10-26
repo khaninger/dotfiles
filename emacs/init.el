@@ -35,12 +35,12 @@
 
 
 ;; Closing
-(defun close-all-buffers-on-frame-delete (frame)
+(defun kevin/close-all-buffers-on-frame-delete (frame)
   "Close all buffers when a frame is deleted."
     (dolist (buffer (buffer-list))
       (unless  (string-equal (buffer-name buffer) "*dashboard*")
         (kill-buffer buffer))))
-(add-hook 'delete-frame-functions 'close-all-buffers-on-frame-delete)
+(add-hook 'delete-frame-functions 'kevin/close-all-buffers-on-frame-delete)
 
 ;; General appearance
 (setq-default indent-tabs-mode nil)
@@ -222,6 +222,7 @@
   :bind
   ("\C-ca" . org-agenda)
   ("\C-cc" . org-capture)
+  (:map org-mode-map ("C-k" . kevin/org-kill-subtree))
   
   :hook
   (org-mode . visual-line-mode)
@@ -231,6 +232,12 @@
   (add-to-list 'org-modules 'org-habit t)
 
 )
+
+(defun kevin/org-kill-subtree ()
+  "Kill the current subtree."
+  (interactive)
+  (org-back-to-heading t)
+  (org-cut-subtree))
 
 ;; Archive subtrees under the same hierarchy as the original org file.
 ;; Link: https://gist.github.com/Fuco1/e86fb5e0a5bb71ceafccedb5ca22fcfb
