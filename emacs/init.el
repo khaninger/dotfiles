@@ -115,7 +115,7 @@
   (dashboard-banner-logo-title ((t (:foreground "#bc6ec5"
                                     :weight bold
                                     :height 2.4))))
-  :config
+  :config  
   (dashboard-setup-startup-hook)
   (setq dashboard-projects-backend 'projectile)
 )
@@ -222,7 +222,7 @@
   :bind
   ("\C-ca" . org-agenda)
   ("\C-cc" . org-capture)
-  (:map org-mode-map ("C-k" . kevin/org-kill-subtree))
+  (:map org-mode-map ("C-S-k" . kevin/org-kill-subtree))
   
   :hook
   (org-mode . visual-line-mode)

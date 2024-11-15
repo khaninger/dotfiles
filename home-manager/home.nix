@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  my-emacs = pkgs.emacs29.override {
+  my-emacs = pkgs.emacs30.override {
     withNativeCompilation = true;
     withSQLite3 = true;
     withTreeSitter = true;
