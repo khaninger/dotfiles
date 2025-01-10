@@ -36,8 +36,9 @@ in
     python3Packages.python-lsp-server
 
     # Rust
-    cargo
-
+    #cargo # collision w rustup
+    rustup
+    
     # Nix
     nixd # includes nix-tree
     
@@ -80,7 +81,7 @@ in
       xdg-open "$remote_url"
       echo "Opened $remote_url in your default browser"
     '')
-
+    
   ];
 
   # Manage home files
@@ -112,6 +113,14 @@ in
         http.postBuffer = 157286400;
         pull.rebase = false;
         init.defaultBranch = "main";
+
+        # Custom diff and merge tool configuration
+        diff.tool = "ediff";
+        difftool.ediff.cmd = "ediff $LOCAL $REMOTE $MERGED";
+        merge.tool = "ediff";
+        mergetool.ediff.cmd = "ediff $LOCAL $REMOTE $MERGED $BASE";
+        mergetool.ediff.trustExitCode = true;
+  
       };
       ignores = [ " **/__pycache__/" "*.pyc" ".venv" ];
     };

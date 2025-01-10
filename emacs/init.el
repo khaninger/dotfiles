@@ -182,6 +182,12 @@
 (use-package magit)
 
 ;;;;;;;;; General navigation, etc
+(use-package move-text
+  :bind
+  ("M-S-<up>" . move-text-up)
+  ("M-S-<down>" . move-text-down)
+ )
+
 (use-package counsel
   :init (setq projectile-completion-system 'ivy)
   :custom
