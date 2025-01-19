@@ -17,6 +17,7 @@ let
     flycheck
     projectile
     #xclip # copy-paste in terminal
+    move-text
     clipetty
   ]);
 in

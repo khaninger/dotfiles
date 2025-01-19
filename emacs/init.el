@@ -131,7 +131,10 @@
 
 
 ;; Rust IDE Config
-(use-package rustic :ensure)
+(use-package rustic :ensure
+  :config
+  (setq rustic-test-arguments "-- --nocapture")
+  )
 
 ;; NIX  IDE config
 (use-package nix-mode :ensure)
@@ -182,12 +185,6 @@
 (use-package magit)
 
 ;;;;;;;;; General navigation, etc
-(use-package move-text
-  :bind
-  ("M-S-<up>" . move-text-up)
-  ("M-S-<down>" . move-text-down)
- )
-
 (use-package counsel
   :init (setq projectile-completion-system 'ivy)
   :custom
@@ -238,6 +235,13 @@
   (add-to-list 'org-modules 'org-habit t)
 
 )
+
+(use-package move-text
+  :bind
+  ("<M-S-up>" . move-text-up)
+  ("<M-S-down>" . move-text-down)
+)
+
 
 (defun kevin/org-kill-subtree ()
   "Kill the current subtree."
