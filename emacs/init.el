@@ -168,9 +168,9 @@
   :hook (python-ts-mode . lsp-deferred)
   :hook (nix-mode . lsp-deferred))
 
-(use-package flycheck
-  :ensure t
-  :hook (lsp-mode . global-flycheck-mode))
+;;(use-package flycheck
+;;  :ensure t
+;;  :hook (lsp-mode . global-flycheck-mode))
 
 (use-package lsp-ui
   :hook (lsp-mode . lsp-ui-mode)
