@@ -10,7 +10,7 @@ cd ~/.dotfiles
 bash setup.sh
 
 ```
-Run `setup.sh` to link in the 
+Run `setup.sh` to install.
 
 # Windows?
-This folder has config 
+This folder has dotfiles that go into `C:\\Users\$USER` for wezterm, wsl itself, and also a shortcut script `.startemacs.vbs`
