@@ -206,34 +206,50 @@ in
       source ${builtins.toString ./wezterm.sh}
       '';
     };
-  starship = {
+    starship = {
       enable = true;
       enableZshIntegration = true;
       enableBashIntegration = true;
       settings = {
         add_newline = false;
         format = "($virtualenv$direnv$nix_shell)$directory$git_branch$git_status$linebreak$character";
+        
+        character = {
+          success_symbol = "[❯](#2aa198)";
+          error_symbol = "[❯](#d70000)";
+        };
+
+        directory = {
+          style = "#4f97d7";
+        };
+        
         git_branch = {
-          symbol = "";
+          symbol = "";
           truncation_length = 10;
           format = "[$symbol$branch(:$remote_branch)]($style)";
+          style = "#af00df";
         };
+        
         direnv = {
           disabled = false;
           unloaded_msg = "";
           loaded_msg = "☥";
           format = "[$loaded]($style)";
+          style = "bold #00ffff";
         };
+        
         nix_shell = {
           format = "[$symbol]($style)";
           symbol = "❄ ";
+          style = "bold #00ffff";
         };
+        
         git_status = {
           format = "([\\[$all_status$ahead_behind\\]]($style))";
           stashed = ""; # basically always have a stash
-          style = "bold purple";
+          style = "bold #af00df";
         };
       };
-    };
+    };    
   };
 }
