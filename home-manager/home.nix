@@ -20,6 +20,7 @@ let
     move-text
     clipetty
   ]);
+
 in
 {
   targets.genericLinux.enable = true; # when not using Nix
@@ -37,11 +38,15 @@ in
     python3Packages.python-lsp-server
 
     # Rust
-    #cargo # collision w rustup
     rustup
     
     # Nix
     nixd # includes nix-tree
+    nh
+    
+    # C++
+    cmake
+    clang-tools # needed for C++ mode emacs
     
     # General dev
     tree-sitter
@@ -132,14 +137,12 @@ in
       enable = true;
       ignores = [".git" ".direnv" ".venv" ".local" "*.pyc" "__pycache__"];
     };
-
     direnv = {
       enable = true;
       enableBashIntegration = true;
       enableZshIntegration = true;
       nix-direnv.enable = true;
     };
-
     fzf = {
       enable = true;
       enableBashIntegration = true;
@@ -157,7 +160,6 @@ in
         ls = "ls --color=auto";
         ll = "ls -l --color=auto";
         em = "emacsclient -a '' -nw $1";
-        nix = "nix --experimental-features flakes --extra-experimental-features nix-command";
         ga = "git add";
         gc = "git commit -m";
         gco = "git checkout";
@@ -172,13 +174,8 @@ in
 
         # Not exposed via home-manager, but needed to keep zsh history updated online
         setopt incappendhistory
-       
-        # Keep vterm directory sync with emacs
-        #function vterm_printf() { printf "\e]%s\e\\" "$1" }
-        #function vterm_printf() { printf "%s" "$1" }
-        #function starship_preprompt_user_func() { print "51;A$(whoami)@$(hostname):$(pwd)" }
-        #starship_preprompt_user_func="starship_preprompt_user_func"
-        #starship_preprompt_user_func="vterm_prompt_end"
+
+        source ${builtins.toString ./wezterm.sh}
       '';
       history = {
         size = 10000;
@@ -197,9 +194,6 @@ in
       historyIgnore = zsh.history.ignorePatterns;
       historyControl = ["ignoreboth"]; # duplicates and with leading space
       initExtra = ''
-      # Write immediately to bash history
-      #PROMPT_COMMAND="history -a;history -n;$PROMPT_COMMAND"
-
       # Keep vterm directory sync with emacs
       vterm_printf() {
         printf "\e]%s\e\\" "$1"
@@ -207,7 +201,9 @@ in
       vterm_prompt_end() {
         vterm_printf "51;A$(whoami)@$(hostname):$(pwd)"
       }
-      starship_precmd_user_func="vterm_prompt_end"; 
+      starship_precmd_user_func="vterm_prompt_end";
+
+      source ${builtins.toString ./wezterm.sh}
       '';
     };
   starship = {
@@ -216,7 +212,7 @@ in
       enableBashIntegration = true;
       settings = {
         add_newline = false;
-        format = "($virtualenv$direnv$nix_shell)$directory$git_branch$git_status$character";
+        format = "($virtualenv$direnv$nix_shell)$directory$git_branch$git_status$linebreak$character";
         git_branch = {
           symbol = "";
           truncation_length = 10;
@@ -230,7 +226,7 @@ in
         };
         nix_shell = {
           format = "[$symbol]($style)";
-          symbol = "❄️ ";
+          symbol = "❄ ";
         };
         git_status = {
           format = "([\\[$all_status$ahead_behind\\]]($style))";
