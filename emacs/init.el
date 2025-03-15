@@ -2,7 +2,6 @@
 (setq default-directory (if (file-directory-p "/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/")
                             "/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/"
                             "~/"))
-;(setq user-emacs-directory "/home/hanikevi/.emacs.d/")
 (setq org-directory default-directory)
 (setq export-directory-custom "/mnt/c/Users/hanikevi/Desktop/")
 (setq org-archive-location (concat org-directory "archived/%s_archive::"))
@@ -33,14 +32,6 @@
 (setq-default initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 (setq-default server-client-instructions nil)  ;;  prevent help instructions on  server client start
 
-
-;; Closing
-(defun kevin/close-all-buffers-on-frame-delete (frame)
-  "Close all buffers when a frame is deleted."
-    (dolist (buffer (buffer-list))
-      (unless  (string-equal (buffer-name buffer) "*dashboard*")
-        (kill-buffer buffer))))
-(add-hook 'delete-frame-functions 'kevin/close-all-buffers-on-frame-delete)
 
 ;; General appearance
 (setq-default indent-tabs-mode nil)
@@ -159,14 +150,21 @@
   (setq lsp-idle-delay 0.5
         lsp-enable-symbol-highlighting t
         lsp-headerline-breadcrumb-enable nil
-        lsp-pylsp-plugins-ruff-enabled t)
+        lsp-pylsp-plugins-ruff-enabled t
+        lsp-clients-clangd-executable "clangd"
+        )
+  
+  
   (lsp-register-client (make-lsp-client :new-connection (lsp-stdio-connection "nixd")
                                         :major-modes '(nix-mode)
                                         :priority 0
                                         :server-id 'nixd))
   ;; rust lsp hooks set in rustic
   :hook (python-ts-mode . lsp-deferred)
-  :hook (nix-mode . lsp-deferred))
+  :hook (nix-mode . lsp-deferred)
+  :hook (c-mode . lsp-deferred)
+  :hook (c++-mode . lsp-deferred)
+  )
 
 ;;(use-package flycheck
 ;;  :ensure t
@@ -359,41 +357,6 @@
 (global-set-key (kbd "C-x p") 'switch-to-prev-buffer)
 (global-set-key (kbd "<C-tab>") 'next-buffer)
 (global-set-key (kbd "<C-S-tab>") 'previous-buffer)
-
-
-;; Org-roam
-;(global-set-key "\C-ck" 'my-org-screenshot)
-;(global-set-key (kbd "C-c r d") #'org-roam-buffer-toggle)
-;(global-set-key (kbd "C-c r i") #'org-roam-node-insert)
-;(global-set-key (kbd "C-c r /") #'org-roam-node-find)
-;(global-set-key (kbd "C-c r b") #'org-roam-switch-to-buffer)
-;(global-set-key (kbd "C-c r r") #'org-ref-helm-insert-cite-link)
-
-
-;;;;;;; Org-roam
-;;(use-package org-roam
-;;             :ensure t
-;;             :custom
-;;             (org-roam-directory (file-truename "/mnt/c/Users/hanikevi/Dropbox/01_Notes/Org/zettelkasten/"))
-;;             :config
-;;             (org-roam-db-autosync-mode))
-
-;; Capture template
-;;(setq org-roam-capture-templates
-;;      '(("d" "default" plain "%?"
-;;         :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-;;                            "#+TITLE: ${title}\n#+CREATED: %U\n#+LAST_MODIFIED: %U\n#+FILETAGS: ")
-;;         :unnarrowed t)))
-
-;;(straight-use-package org-roam-ui
-;;  :after org-roam
-;;  ;;:hook (after-init . org-roam-ui-mode)
-;;  :config
-;;  (setq org-roam-ui-sync-theme t
-;;        org-roam-ui-follow t
-;;        org-roam-ui-update-on-save t
-;;        org-roam-ui-open-on-start t))
-
 
 ;;(use-package tramp
 ;;  :custom
