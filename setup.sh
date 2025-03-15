@@ -4,7 +4,7 @@ if [ ! -f "${HOME}/.dotfiles/setup.sh" ]; then
   exit 1
 fi
 
-read -p "Setup emacs files? [y/n] " response
+read -p "Setup emacs files? Not needed if doing home-manager [y/n] " response
 if [[ "$response" == "y" ]]; then
     echo "Soft linking emacs .dotfiles"\\
     mkdir ${HOME}/.emacs.d
@@ -35,6 +35,12 @@ then
     ln -s ${HOME}/.dotfiles/home-manager/home.nix ${HOME}/.config/home-manager/
 
     echo ". $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" >> $HOME/.profile
+fi
+
+read -r -p "Install Windows configs to C://Users/$USER [y/n] " response
+if [ $response == "y" ]
+then
+    cp -r windows/. "/mnt/c/Users/$USER/"
 fi
 
 
