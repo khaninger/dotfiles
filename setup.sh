@@ -43,6 +43,11 @@ then
     cp -r windows/. "/mnt/c/Users/$USER/"
 fi
 
+read -r -p "Make emacs shortcut in /usr/share/applications? [y/n] " response
+if [ $response == "y" ]
+then
+    sudo cp emacs.desktop /usr/share/applications/
+fi
 
 read -r -p "Install font? [y/n] " response
 if [ $response == "y" ]

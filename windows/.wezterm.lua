@@ -3,6 +3,7 @@ local config = {}
 if wezterm.config_builder then
   config = wezterm.config_builder()
 end
+
 -- Default start
 config.wsl_domains = {
   {
@@ -13,23 +14,31 @@ config.wsl_domains = {
 }
 config.default_domain = 'WSL:Ubuntu'
 config.default_prog = { "wsl.exe" }
+
+
+--config.disableDefaultBindings = true
+ 
+config.keys = {
+  {
+    key = 'Enter',
+    mods = 'ALT',
+    action = wezterm.action.DisableDefaultAssignment,
+  },
+ 
+}
+
+
 -- Appearance
 config.font = wezterm.font("Berkeley Mono")
-config.color_scheme = "SpacemacsTheme" -- Changed from Catppuccin Mocha
+config.window_decorations = "RESIZE"
 
--- Add Spacemacs Dark theme colors
+config.color_scheme = "SpacemacsTheme" -- Changed from Catppuccin Mocha
 config.colors = {
-  -- Spacemacs Dark background color
   background = "#262626",
-  -- Title bar colors
   tab_bar = {
     background = "#262626",
   },
 }
-
-config.window_decorations = "RESIZE"
-
--- Define Spacemacs theme colors
 config.color_schemes = {
   ["SpacemacsTheme"] = {
     foreground = "#a3a3a3",

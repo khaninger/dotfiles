@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Name=emacs
+Exec=~/.nix-profile/bin/emacsclient -ca ''
