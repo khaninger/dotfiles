@@ -146,6 +146,46 @@
                            ))
                         ))
            ))
+
+         ("e" "pErsonal view"
+           ((agenda "" ((org-agenda-overriding-header "Deadlines")
+                       (org-agenda-files '("misc_pers_todos.org"))
+                       (org-agenda-span 7)
+                       (org-agenda-include-diary nil)
+                       (org-agenda-use-timegrid nil)
+                       (org-agenda-skip-scheduled-if-done t)
+                       (org-agenda-skip-deadline-if-done t)
+                       (org-agenda-skip-timestamp-if-done t)
+                       (org-agenda-time-grid '((nil) (nil) "" ""))
+                       (org-agenda-prefix-format "  %i %-12T")
+                       (org-agenda-entry-types '(:deadline))
+                       (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE")))
+                       ;;(org-agenda-log-mode-items nil)
+                       ))
+           (alltodo "" ((org-agenda-overriding-header "Staged")
+                        (org-agenda-files '("misc_pers_todos.org"))
+                        (org-agenda-prefix-format "  %i %-12T")
+                        (org-super-agenda-groups
+                         '((:name ""
+                                  :todo "STAGED"
+                                  :scheduled today
+                                  :scheduled past
+                                  :order 2)
+                           (:discard (:anything t))
+                           ))
+                        ))
+           (alltodo "" ((org-agenda-overriding-header "TODO")
+                        (org-agenda-files '("misc_pers_todos.org"))
+                        (org-agenda-prefix-format "  %i %-12T")
+                        (org-super-agenda-groups
+                         '((:name ""
+                                  :todo "TODO"
+                                  :order 2)
+                           (:discard (:anything t))
+                           ))
+                        ))
+           ))
+         
          ("r" "Projects"
           ((todo "STATUS|TODO|STAGED"
                  ((org-agenda-prefix-format "  ")
