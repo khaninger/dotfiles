@@ -149,6 +149,7 @@
   :config
   (setq lsp-idle-delay 0.5
         lsp-enable-symbol-highlighting t
+        lsp-enable-snippet nil
         lsp-headerline-breadcrumb-enable nil
         lsp-pylsp-plugins-ruff-enabled t
         lsp-clients-clangd-executable "clangd"
