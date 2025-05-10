@@ -33,9 +33,8 @@ in
   home.packages = with pkgs;  [
     # Python
     ruff
-    ruff-lsp
+    #ruff-lsp
     poetry
-    python3Packages.python-lsp-server
 
     # Rust
     rustup
@@ -43,6 +42,7 @@ in
     # Nix
     nixd # includes nix-tree
     nh
+    cachix
     
     # C++
     cmake

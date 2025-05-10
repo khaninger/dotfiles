@@ -32,7 +32,12 @@ then
 
     echo "Soft linking home.nix"
     rm ${HOME}/.config/home-manager/home.nix
+    rm ${HOME}/.config/home-manager/flake.nix
+    rm ${HOME}/.config/home-manager/flake.lock
+    
     ln -s ${HOME}/.dotfiles/home-manager/home.nix ${HOME}/.config/home-manager/
+    ln -s ${HOME}/.dotfiles/home-manager/flake.nix ${HOME}/.config/home-manager/
+    ln -s ${HOME}/.dotfiles/home-manager/flake.lock ${HOME}/.config/home-manager/
 
     echo ". $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" >> $HOME/.profile
 fi
