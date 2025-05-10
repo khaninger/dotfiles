@@ -33,7 +33,7 @@ in
   home.packages = with pkgs;  [
     # Python
     ruff
-    #ruff-lsp
+    #ruff-lsp # missing in unstable, but seems to run from just ruff 
     poetry
 
     # Rust
