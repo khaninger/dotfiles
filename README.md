@@ -12,5 +12,6 @@ bash setup.sh
 ```
 Run `setup.sh` to install.
 
+To rebuild & enter the home-manager env, a simple `home-manager switch --impure` will do. 
 # Windows?
 This folder has dotfiles that go into `C:\\Users\$USER` for wezterm, wsl itself, and also a shortcut script `.startemacs.vbs`
