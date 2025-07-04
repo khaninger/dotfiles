@@ -35,7 +35,8 @@ in
     ruff
     #ruff-lsp # missing in unstable, but seems to run from just ruff 
     poetry
-
+    python3Packages.python-lsp-server
+    
     # Rust
     rustup
     

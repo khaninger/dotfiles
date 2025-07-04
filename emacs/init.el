@@ -151,10 +151,9 @@
         lsp-enable-symbol-highlighting t
         lsp-enable-snippet nil
         lsp-headerline-breadcrumb-enable nil
-        lsp-pylsp-plugins-ruff-enabled t
+        lsp-pylsp-plugins-ruff-enabled f
         lsp-clients-clangd-executable "clangd"
         )
-  
   
   (lsp-register-client (make-lsp-client :new-connection (lsp-stdio-connection "nixd")
                                         :major-modes '(nix-mode)
