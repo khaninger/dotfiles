@@ -223,6 +223,9 @@
   :bind
   ("\C-ca" . org-agenda)
   ("\C-cc" . org-capture)
+  ("\C-cb" . org-mark-ring-goto)
+  ("\C-n" . org-next-visible-heading)
+  ("\C-p" . org-previous-visible-heading)
   (:map org-mode-map ("C-S-k" . kevin/org-kill-subtree))
   
   :hook

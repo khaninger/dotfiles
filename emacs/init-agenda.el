@@ -8,7 +8,7 @@
   (setq org-agenda-start-on-weekday nil)
   (setq org-deadline-warning-days 0)
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "BLOCKED(b@)" "STAGED(s)" "DELEGATED(e)" "|" "DONE(d)" "DROPPED(r@)")))
+        '((sequence "TODO(t)" "BLOCKED(b@)" "STAGED(s)" "DELEGATED(e@)" "|" "DONE(d)" "DROPPED(r@)")))
   (setq org-log-states-order-reversed t)
   (setq org-log-done t)
   (setq org-log-mode-items '(closed clock state))
@@ -16,7 +16,7 @@
         '((agenda . " %i %-9(kevin/get-highest-tag) %-14T")
           ;(todo . " %i %-20:b \n    ")
           (todo .   " %i %-9(kevin/get-highest-tag) %-14T")
-          (tags .   " %i %-12(kevin/format-filename-for-agenda)")
+          (tags .   " %i %-9(kevin/get-highest-tag)")
           (search . " %i %-12(kevin/format-filename-for-agenda)")))
   ;;(setq org-agenda-todo-ignore-scheduled 'future)
   (setq org-agenda-show-inherited-tags 'always)
@@ -50,7 +50,7 @@
          ((agenda  "" ((org-agenda-overriding-header "Deadlines")
                        (org-agenda-span 'week)
                        (org-agenda-time-grid '((nil) (nil) "" ""))
-                       (org-agenda-entry-types '(:deadline))
+                       (org-agenda-entry-types '(:deadline :scheduled))
                        (org-agenda-skip-deadline-if-done t)
                        ))
           (alltodo "" ((org-agenda-overriding-header "Scheduled in past")
@@ -120,7 +120,7 @@
                        (org-agenda-include-diary nil)
                        (org-agenda-files (append '("exchange2org/outlook_calendar.org") org-agenda-files))
                        (org-agenda-prefix-format "  %i %-6t ")
-                       (org-agenda-entry-types '(:scheduled*))
+                       ;(org-agenda-entry-types '(:scheduled))
                        ))
            (agenda "" ((org-agenda-overriding-header "Deadlines")
                        (org-agenda-span 3)
@@ -135,7 +135,7 @@
                        (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE")))
                        ;;(org-agenda-log-mode-items nil)
                        ))
-           (alltodo "" ((org-agenda-overriding-header "Staged")
+           (alltodo "" ((org-agenda-overriding-header "Staged/Scheduled")
                         (org-super-agenda-groups
                          '((:name ""
                                   :todo "STAGED"
