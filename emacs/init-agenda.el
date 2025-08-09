@@ -9,14 +9,15 @@
   (setq org-deadline-warning-days 0)
   (setq org-todo-keywords
         '((sequence "TODO(t)" "BLOCKED(b@)" "STAGED(s)" "DELEGATED(e@)" "|" "DONE(d)" "DROPPED(r@)")))
+  (add-hook 'org-after-todo-state-change-hook #'kevin/org-prompt-for-tag-on-todo-state-change)
   (setq org-log-states-order-reversed t)
   (setq org-log-done t)
   (setq org-log-mode-items '(closed clock state))
   (setq org-agenda-prefix-format
-        '((agenda . " %i %-9(kevin/get-highest-tag) %-14T")
+        '((agenda . " %i %-9(kevin/get-highest-tag) %-12(kevin/get-second-highest-tag)")
           ;(todo . " %i %-20:b \n    ")
-          (todo .   " %i %-9(kevin/get-highest-tag) %-14T")
-          (tags .   " %i %-9(kevin/get-highest-tag)")
+          (todo .   " %i %-9(kevin/get-highest-tag) %-12(kevin/get-second-highest-tag)")
+          (tags .   " %i %-9(kevin/get-highest-tag) %-10(kevin/get-second-highest-tag)")
           (search . " %i %-12(kevin/format-filename-for-agenda)")))
   ;;(setq org-agenda-todo-ignore-scheduled 'future)
   (setq org-agenda-show-inherited-tags 'always)
@@ -50,7 +51,7 @@
          ((agenda  "" ((org-agenda-overriding-header "Deadlines")
                        (org-agenda-span 'week)
                        (org-agenda-time-grid '((nil) (nil) "" ""))
-                       (org-agenda-entry-types '(:deadline :scheduled))
+                       (org-agenda-entry-types '(:deadline))
                        (org-agenda-skip-deadline-if-done t)
                        ))
           (alltodo "" ((org-agenda-overriding-header "Scheduled in past")
@@ -62,50 +63,59 @@
                            ))
                         ))
          (alltodo "" ((org-agenda-overriding-header "TODOs")
-                       (org-agenda-sorting-strategy '(category-down))
+                       (org-agenda-sorting-strategy '(priority-down))
                        (org-super-agenda-groups
-                        `((:name "Blocked"
-                                 :todo "BLOCKED"
-                                 :order 9 )
-                          (:discard (:todo "DELEGATED"))
+                        `((:discard (:todo "DELEGATED"))
+                          (:discard (:todo "BLOCKED"))
+                          (:discard (:scheduled t))
+                          (:name "Low Prio"
+                                 :priority "C"
+                                 :order 7)
+                          (:name "Deadlined"
+                                 :deadline t
+                                 :order 4)
                           (:name "Staged"
                                  :todo "STAGED"
-                                 :order 1)
-                          (:name "Scheduled - Next week"
+                                 :order 2)
+                          (:name "Unblocked, unscheduled, (unbothered)"
+                                 :not (:scheduled future)
+                                 :order 3)
+                          ))
+                       (org-agenda nil "a")))
+         
+         (alltodo "" ((org-agenda-overriding-header "SCHEDULED")
+                      (org-agenda-sorting-strategy '(scheduled-up))
+;                      (org-agenda-prefix-format "  %i %-10(kevin/get-highest-tag) %-10(kevin/get-second-highest-tag)")
+                      (org-super-agenda-groups
+                       `((:discard (:scheduled nil))
+                         (:name "Scheduled - Next 7 days"
                                  :scheduled (before ,(org-read-date nil nil "+8"))
                                  :deadline (before ,(org-read-date nil nil "+8"))
-                                 :order 10)
+                                 :order 5)
                           (:name "Scheduled - Distant future"
                                  :scheduled (after ,(org-read-date nil nil "+7"))
                                  :deadline (after ,(org-read-date nil nil "+7"))
-                                 :order 12)
-
-                          (:name "Unblocked, unscheduled, (unbothered)"
-                                 :and (:category "proj" :not (:scheduled future))
-                                 :order 3)
-                            (:name ""
-                                 :and (:category "adv" :not (:scheduled future))
-                                 :order 4)
-                            (:name ""
-                                 :and (:category "acq" :not (:scheduled future))
-                                 :order 5)
-                            (:name ""
-                                 :and (:category "paper" :not (:scheduled future))
-                                 :order 6)
-                            (:name ""
-                                 :and (:category "misc" :not (:scheduled future))
-                                 :order 7)
-                            (:name ""
-                                 :and (:category "capt" :not (:scheduled future))
-                                 :order 8)))
-                           (org-agenda nil "a")))
+                                 :order 6)))
+                      ))
+         
          (alltodo "" ((org-agenda-overriding-header "DELEGATED")
                       (org-agenda-sorting-strategy '(category-down tag-down))
-                      (org-agenda-prefix-format "  %i %-12(kevin/get-highest-tag) %-10(kevin/get-lowest-tag)")
+                      (org-agenda-prefix-format "  %i %-10(kevin/get-highest-tag) %-10(kevin/get-second-highest-tag) %-10(kevin/get-lowest-tag)")
                       (org-super-agenda-groups
                        `((:name ""
                           ;;:auto-map kevin/get-highest-tag
                           :todo "DELEGATED"
+                          :order 2 )
+                         (:discard (:anything t))))
+                      ))
+        
+         (alltodo "" ((org-agenda-overriding-header "BLOCKED")
+                      (org-agenda-sorting-strategy '(category-down tag-down))
+                      ;(org-agenda-prefix-format "  %i %-10(kevin/get-highest-tag) %-10(kevin/get-second-highest-tag)")
+                      (org-super-agenda-groups
+                       `((:name ""
+                          ;;:auto-map kevin/get-highest-tag
+                          :todo "BLOCKED"
                           :order 2 )
                          (:discard (:anything t))))
                       ))

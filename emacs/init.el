@@ -252,15 +252,17 @@
     "Temp buffer with my commonly-used keybindings"
     [
      ["File Navigation"
-      ("t" "TODOs" (lambda () (interactive) (find-file (expand-file-name "misc_todos.org"))))
-      ("p" "Personal TODOs" (lambda () (interactive) (find-file (expand-file-name "misc_pers_todos.org"))))
+      ("s" "TODOs" (lambda () (interactive) (find-file (expand-file-name "misc_todos.org"))))
       ("d" "Dashboard" (lambda () (interactive) (switch-to-buffer "*dashboard*")))
+      ("f" "Personal TODOs" (lambda () (interactive) (find-file (expand-file-name "misc_pers_todos.org"))))
+      
       ]
 
      ["Agenda"
       ("j" "Planning view" (lambda () (interactive) (org-agenda nil "p")))
       ("k" "Day view" (lambda () (interactive) (org-agenda nil "d")))
-      ("l" "Capture TODO" (lambda () (interactive) (org-capture nil "t")))
+      ("l" "Tag view" (lambda () (interactive) (org-agenda nil "m")))
+      (";" "Capture TODO" (lambda () (interactive) (org-capture nil "t")))
      ]
      
      ["Org"
@@ -363,6 +365,15 @@
 ;;(use-package 'citeproc)  ;;Org-Outlook integration
 
 
+(defun kevin/org-prompt-for-tag-on-todo-state-change ()
+  "Prompt for a tag when changing to a specific TODO state."
+  (when (string= org-state "DELEGATED")  ;; replace MYSTATE with your desired TODO state
+    (let ((tag (completing-read "Tag to add: " (org-get-buffer-tags))))
+      (when (not (string-empty-p tag))
+        (org-set-tags-to tag )))))
+
+
+
 (defadvice org-export-output-file-name (before org-add-export-dir activate)
   "Set export file name to DATE_HEADLINE.html in `export-directory-custom`."
   (let* ((headline (or (nth 4 (org-heading-components)) "export"))
@@ -396,9 +407,28 @@
     (if (not (seq-empty-p local_fname))
 	(format "%s " local_fname) "")))
 
+(defun kevin/get-highest-headline ()
+  "Return the highest headline in the current outline path."
+  (let ((path (org-get-outline-path t))) ; t = use full text
+    (nth 0 path))) ;; index 0 = highest headline, 1 = second highest
+
+(defun kevin/get-second-highest-headline ()
+  "Return the 2nd-highest headline in the current outline path, 
+or an empty string if there isn't one."
+  (let ((path (org-get-outline-path t))) ; t = use full text
+    (if (> (length path) 2)  ;; means: top-level, second-level, current
+        (nth 1 path)
+      "")))
+
 (defun kevin/get-highest-tag ()
   (let ((tags (org-get-tags (point) nil)))
     (if tags (car tags) "" )))
+
+(defun kevin/get-second-highest-tag ()
+  (let ((tags (org-get-tags (point) nil)))
+    (if (and tags (cadr tags))
+        (cadr tags)
+      "")))
 
 (defun kevin/get-lowest-tag ()
   (let ((tags (org-get-tags (point) nil)))
