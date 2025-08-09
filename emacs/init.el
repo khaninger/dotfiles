@@ -245,23 +245,30 @@
   ("<M-S-down>" . move-text-down)
 )
 
+(use-package transient
+  :ensure t
+  :config
+  (transient-define-prefix kevin/keybindings-buffer ()
+    "Temp buffer with my commonly-used keybindings"
+    [
+     ["General"
+      ("u" "(M-S-up)      Move text up" move-text-up)
+      ("d" "(M-S-down)    Move text down" move-text-down)
+      ("m" "(C-SPC C-SPC) Mark to ring "
+       (lambda () (interactive) (message "Use C-SPC C-SPC to set mark to ring")))
+      ("p" "(C-x C-SPC)   Pop global mark ring "
+       (lambda () (interactive) (message "Use C-x C-SPC to pop global mark ring")))]
 
-(defun kevin/keybindings-buffer ()
-  "Temp buffer with my commonly-used keybindings"
-  (interactive)
-  (with-output-to-temp-buffer "*My Keybindings*"
-    (princ "Kevin's Keybindings:\n")
-    (princ " M-S-up/-down  -> move-text-up/-down\n")
-    (princ " C-SPC C-SPC   -> mark to ring\n")
-    (princ " C-x   C-SPC   -> pop  global mark ring\n")
-    (princ "\nOrg\n")
-    (princ " C-c t         -> org-show-todo-tree\n")
-    (princ " C-c n         -> org-narrow-to-subtree\n")
-    (princ " C-c C-x C-a   -> org-archive-subtree\n")
-    (princ " C-c m         -> org-mark-subtree\n")
+     ["Org"
+      ("t" "(C-c t)       Show TODO tree" org-show-todo-tree)
+      ("n" "(C-c n)       Narrow to subtree" org-narrow-to-subtree)
+      ("a" "(C-c C-x C-a) Archive subtree" org-archive-subtree)
+      ("m" "(C-c m)       Mark subtree" org-mark-subtree)]
+     ]
     )
+  :bind
+  ("C-h m" . kevin/keybindings-buffer)
   )
-(global-set-key (kbd "C-h m") #'kevin/keybindings-buffer)
 
 (defun kevin/org-kill-subtree ()
   "Kill the current subtree."
