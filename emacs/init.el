@@ -223,6 +223,8 @@
   :bind
   ("\C-ca" . org-agenda)
   ("\C-cc" . org-capture)
+  ("\C-ct" . org-show-todo-tree) ;; Show the todo items in the current buffer
+  ("\C-cm" . org-mark-subtree)
   ("\C-cb" . org-mark-ring-goto)
   ("\C-n" . org-next-visible-heading)
   ("\C-p" . org-previous-visible-heading)
@@ -243,6 +245,23 @@
   ("<M-S-down>" . move-text-down)
 )
 
+
+(defun kevin/keybindings-buffer ()
+  "Temp buffer with my commonly-used keybindings"
+  (interactive)
+  (with-output-to-temp-buffer "*My Keybindings*"
+    (princ "Kevin's Keybindings:\n")
+    (princ " M-S-up/-down  -> move-text-up/-down\n")
+    (princ " C-SPC C-SPC   -> mark to ring\n")
+    (princ " C-x   C-SPC   -> pop  global mark ring\n")
+    (princ "\nOrg\n")
+    (princ " C-c t         -> org-show-todo-tree\n")
+    (princ " C-c n         -> org-narrow-to-subtree\n")
+    (princ " C-c C-x C-a   -> org-archive-subtree\n")
+    (princ " C-c m         -> org-mark-subtree\n")
+    )
+  )
+(global-set-key (kbd "C-h m") #'kevin/keybindings-buffer)
 
 (defun kevin/org-kill-subtree ()
   "Kill the current subtree."
