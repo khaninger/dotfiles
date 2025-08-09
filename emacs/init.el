@@ -214,7 +214,7 @@
       '(("t" "TODO" entry (file+headline "misc_todos.org" "Captured")
          "** TODO %?")
         ("p" "Personal TODO" entry (file+headline "misc_pers_todos.org" "Captured")
-         "** STAGED %?")))
+         "** TODO %?")))
   
   ;; Export
   (org-export-with-toc nil)
@@ -251,23 +251,36 @@
   (transient-define-prefix kevin/keybindings-buffer ()
     "Temp buffer with my commonly-used keybindings"
     [
-     ["General"
-      ("u" "(M-S-up)      Move text up" move-text-up)
-      ("d" "(M-S-down)    Move text down" move-text-down)
-      ("m" "(C-SPC C-SPC) Mark to ring "
-       (lambda () (interactive) (message "Use C-SPC C-SPC to set mark to ring")))
-      ("p" "(C-x C-SPC)   Pop global mark ring "
-       (lambda () (interactive) (message "Use C-x C-SPC to pop global mark ring")))]
+     ["File Navigation"
+      ("t" "TODOs" (lambda () (interactive) (find-file (expand-file-name "misc_todos.org"))))
+      ("p" "Personal TODOs" (lambda () (interactive) (find-file (expand-file-name "misc_pers_todos.org"))))
+      ("d" "Dashboard" (lambda () (interactive) (switch-to-buffer "*dashboard*")))
+      ]
 
-     ["Org"
-      ("t" "(C-c t)       Show TODO tree" org-show-todo-tree)
-      ("n" "(C-c n)       Narrow to subtree" org-narrow-to-subtree)
-      ("a" "(C-c C-x C-a) Archive subtree" org-archive-subtree)
-      ("m" "(C-c m)       Mark subtree" org-mark-subtree)]
+     ["Agenda"
+      ("j" "Planning view" (lambda () (interactive) (org-agenda nil "p")))
+      ("k" "Day view" (lambda () (interactive) (org-agenda nil "d")))
+      ("l" "Capture TODO" (lambda () (interactive) (org-capture nil "t")))
      ]
+     
+     ["Org"
+      ("s" "(C-c t)       Show TODO tree" org-show-todo-tree)
+      ("n" "(C-c n)       Narrow to subtree" org-narrow-to-subtree)
+      ("x" "(C-c C-x C-a) Archive subtree" org-archive-subtree)
+      ("m" "(C-c m)       Mark subtree" org-mark-subtree)
+      ]
+
+    ["Reference"
+      ("*" "(M-S-up)      Move text up" move-text-up)
+      ("*" "(M-S-down)    Move text down" move-text-down)
+      ("*" "(C-SPC C-SPC) Mark to ring "
+       (lambda () (interactive) (message "Use C-SPC C-SPC to set mark to ring")))
+      ("*" "(C-x C-SPC)   Pop global mark ring "
+       (lambda () (interactive) (message "Use C-x C-SPC to pop global mark ring")))]
+    ]
     )
   :bind
-  ("C-h m" . kevin/keybindings-buffer)
+  ("C-d" . kevin/keybindings-buffer)
   )
 
 (defun kevin/org-kill-subtree ()
@@ -349,8 +362,23 @@
 ;;(add-hook 'org-mode-hook (lambda () (org-fragtog-mode 1)))
 ;;(use-package 'citeproc)  ;;Org-Outlook integration
 
-;; Org capture
+
 (defadvice org-export-output-file-name (before org-add-export-dir activate)
+  "Set export file name to DATE_HEADLINE.html in `export-directory-custom`."
+  (let* ((headline (or (nth 4 (org-heading-components)) "export"))
+         (safe-headline (replace-regexp-in-string "[^A-Za-z0-9]+" "_" headline))
+         (date-prefix (format-time-string "%Y%m%d"))
+         (new-filename (concat date-prefix "_" safe-headline)))
+    (when (not pub-dir)
+      (setq pub-dir export-directory-custom)
+      (unless (file-directory-p pub-dir)
+        (make-directory pub-dir t)))
+    (ad-set-arg 0
+                (expand-file-name
+                (concat new-filename ".html")
+                pub-dir))))
+;; Org capture
+(defadvice break-org-export-output-file-name (before org-add-export-dir activate)
 "Modifies org-export to place exported files in a different directory"
   (when (not pub-dir)
     (setq pub-dir export-directory-custom)
