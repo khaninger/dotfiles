@@ -6,6 +6,15 @@
   (setq org-agenda-files (list (concat org-directory "misc_todos.org")))
   ;;(setq org-agenda-files (list org-directory))
   (setq org-agenda-start-on-weekday nil)
+  (setq org-agenda-format-date
+        (lambda (date)
+          (let* ((time (encode-time 0 0 0 (nth 1 date) (nth 0 date) (nth 2 date)))
+                 (daynum (calendar-day-of-week date)))
+            (if (= daynum 1) ;; Monday, monday
+                (format-time-string "%a %b %d <- W%V" time)
+              (format-time-string "%a %b %d" time)
+              ))))
+
   (setq org-deadline-warning-days 0)
   (setq org-todo-keywords
         '((sequence "TODO(t)" "BLOCKED(b@)" "STAGED(s)" "DELEGATED(e@)" "|" "DONE(d)" "DROPPED(r@)")))
@@ -15,7 +24,6 @@
   (setq org-log-mode-items '(closed clock state))
   (setq org-agenda-prefix-format
         '((agenda . " %i %-9(kevin/get-highest-tag) %-12(kevin/get-second-highest-tag)")
-          ;(todo . " %i %-20:b \n    ")
           (todo .   " %i %-9(kevin/get-highest-tag) %-12(kevin/get-second-highest-tag)")
           (tags .   " %i %-9(kevin/get-highest-tag) %-10(kevin/get-second-highest-tag)")
           (search . " %i %-12(kevin/format-filename-for-agenda)")))
@@ -44,6 +52,7 @@
         org-agenda-todo-keyword-format ""
         org-agenda-remove-tags t
         org-super-agenda-hide-empty-groups nil
+        org-super-agenda-header-separator ""
         ;org-super-agenda-header-properties '(org-super-agenda-header t org-agenda-structural-header t))
         org-super-agenda-header-properties '(org-agenda-structural-header t))
   (setq org-agenda-custom-commands
@@ -54,30 +63,20 @@
                        (org-agenda-entry-types '(:deadline))
                        (org-agenda-skip-deadline-if-done t)
                        ))
-          (alltodo "" ((org-agenda-overriding-header "Scheduled in past")
-                        (org-super-agenda-groups
-                         '((:name ""
-                                  :scheduled past
-                                  :order 2)
-                           (:discard (:anything t))
-                           ))
-                        ))
-         (alltodo "" ((org-agenda-overriding-header "TODOs")
+
+         (alltodo "" ((org-agenda-overriding-header "Actionable unscheduled TODOs")
                        (org-agenda-sorting-strategy '(priority-down))
                        (org-super-agenda-groups
                         `((:discard (:todo "DELEGATED"))
                           (:discard (:todo "BLOCKED"))
+                          (:name "Staged" ;; We want staged even if they're scheduled!
+                                 :todo "STAGED"
+                                 :order 2)
                           (:discard (:scheduled t))
                           (:name "Low Prio"
                                  :priority "C"
                                  :order 7)
-                          (:name "Deadlined"
-                                 :deadline t
-                                 :order 4)
-                          (:name "Staged"
-                                 :todo "STAGED"
-                                 :order 2)
-                          (:name "Unblocked, unscheduled, (unbothered)"
+                          (:name "Actionable"
                                  :not (:scheduled future)
                                  :order 3)
                           ))
@@ -85,32 +84,40 @@
          
          (alltodo "" ((org-agenda-overriding-header "SCHEDULED")
                       (org-agenda-sorting-strategy '(scheduled-up))
-;                      (org-agenda-prefix-format "  %i %-10(kevin/get-highest-tag) %-10(kevin/get-second-highest-tag)")
-                      (org-super-agenda-groups
-                       `((:discard (:scheduled nil))
-                         (:name "Scheduled - Next 7 days"
-                                 :scheduled (before ,(org-read-date nil nil "+8"))
-                                 :deadline (before ,(org-read-date nil nil "+8"))
-                                 :order 5)
-                          (:name "Scheduled - Distant future"
-                                 :scheduled (after ,(org-read-date nil nil "+7"))
-                                 :deadline (after ,(org-read-date nil nil "+7"))
-                                 :order 6)))
-                      ))
+                     (org-agenda-time-grid '((nil) (nil) "" ""))
+                     (org-super-agenda-groups
+                      `((:name "Past"
+                               :scheduled past)
+                        (:discard (:anything t))
+                        ))
+                     ))
+
+         (agenda "" ((org-agenda-overriding-header "")
+                     (org-agenda-block-separator nil)
+                     (org-agenda-sorting-strategy '(scheduled-up))
+                     (org-agenda-span 'week)
+                     (org-agenda-time-grid '((nil) (nil) "" ""))
+                     (org-agenda-entry-types '(:scheduled))
+                     (org-agenda-skip-scheduled-if-done t)
+                     (org-scheduled-past-days 0)
+                     ))
+
+         (alltodo "" ((org-agenda-overriding-header "")
+                      (org-agenda-block-separator nil)
+                     (org-agenda-sorting-strategy '(scheduled-up))
+                     (org-agenda-time-grid '((nil) (nil) "" ""))
+                     (org-super-agenda-groups
+                      `((:name "Distant future"
+                               :time-grid t
+                               :scheduled (after ,(org-read-date nil nil "+7")))
+                        (:discard (:anything t))
+                        ))
+                     ))
+
          
-         (alltodo "" ((org-agenda-overriding-header "DELEGATED")
-                      (org-agenda-sorting-strategy '(category-down tag-down))
-                      (org-agenda-prefix-format "  %i %-10(kevin/get-highest-tag) %-10(kevin/get-second-highest-tag) %-10(kevin/get-lowest-tag)")
-                      (org-super-agenda-groups
-                       `((:name ""
-                          ;;:auto-map kevin/get-highest-tag
-                          :todo "DELEGATED"
-                          :order 2 )
-                         (:discard (:anything t))))
-                      ))
         
          (alltodo "" ((org-agenda-overriding-header "BLOCKED")
-                      (org-agenda-sorting-strategy '(category-down tag-down))
+                      (org-agenda-sorting-strategy '(tag-up))
                       ;(org-agenda-prefix-format "  %i %-10(kevin/get-highest-tag) %-10(kevin/get-second-highest-tag)")
                       (org-super-agenda-groups
                        `((:name ""
@@ -119,7 +126,20 @@
                           :order 2 )
                          (:discard (:anything t))))
                       ))
+
+         (alltodo "" ((org-agenda-overriding-header "DELEGATED")
+                      (org-agenda-sorting-strategy '(tag-up))
+                      (org-agenda-prefix-format "  %i %-10(kevin/get-highest-tag) %-10(kevin/get-second-highest-tag) %-10(kevin/get-lowest-tag)")
+                      (org-super-agenda-groups
+                       `((:name ""
+                          ;;:auto-map kevin/get-highest-tag
+                          :todo "DELEGATED"
+                          :order 2 )
+                         (:discard (:anything t))))
+                      ))
+
          ))
+
         
          ("d" "Day view"
           ((agenda "" ((org-agenda-overriding-header "Today")

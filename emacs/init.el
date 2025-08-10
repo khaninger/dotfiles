@@ -252,9 +252,9 @@
     "Temp buffer with my commonly-used keybindings"
     [
      ["File Navigation"
-      ("s" "TODOs" (lambda () (interactive) (find-file (expand-file-name "misc_todos.org"))))
+      ("s" "TODOs" (lambda () (interactive) (find-file (expand-file-name "misc_todos.org" org-directory))))
       ("d" "Dashboard" (lambda () (interactive) (switch-to-buffer "*dashboard*")))
-      ("f" "Personal TODOs" (lambda () (interactive) (find-file (expand-file-name "misc_pers_todos.org"))))
+      ("f" "Personal TODOs" (lambda () (interactive) (find-file (expand-file-name "misc_pers_todos.org" org-directory))))
       
       ]
 
@@ -263,10 +263,11 @@
       ("k" "Day view" (lambda () (interactive) (org-agenda nil "d")))
       ("l" "Tag view" (lambda () (interactive) (org-agenda nil "m")))
       (";" "Capture TODO" (lambda () (interactive) (org-capture nil "t")))
+      ("o" "Update outlook" (lambda () (interactive) (exchange2org)))
      ]
      
      ["Org"
-      ("s" "(C-c t)       Show TODO tree" org-show-todo-tree)
+      ("t" "(C-c t)       Show TODO tree" org-show-todo-tree)
       ("n" "(C-c n)       Narrow to subtree" org-narrow-to-subtree)
       ("x" "(C-c C-x C-a) Archive subtree" org-archive-subtree)
       ("m" "(C-c m)       Mark subtree" org-mark-subtree)
@@ -372,8 +373,6 @@
       (when (not (string-empty-p tag))
         (org-set-tags-to tag )))))
 
-
-
 (defadvice org-export-output-file-name (before org-add-export-dir activate)
   "Set export file name to DATE_HEADLINE.html in `export-directory-custom`."
   (let* ((headline (or (nth 4 (org-heading-components)) "export"))
@@ -388,20 +387,18 @@
                 (expand-file-name
                 (concat new-filename ".html")
                 pub-dir))))
-;; Org capture
-(defadvice break-org-export-output-file-name (before org-add-export-dir activate)
-"Modifies org-export to place exported files in a different directory"
-  (when (not pub-dir)
-    (setq pub-dir export-directory-custom)
-    (when (not (file-directory-p pub-dir))
-      (make-directory pub-dir))))
 
 (defun exchange2org ()
   (interactive)
-  (shell-command (concat default-directory "exchange2org/outlook2org.sh")))
+  (call-process "wget" nil "*Shell Command Output*" nil
+                "https://outlook.office365.com/owa/calendar/a906de7c4b7f4c2b93bcc69991a54a7a@ipk.fraunhofer.de/d530cd96b5394f6bb8ea8917a70f0ba37198193314175109983/calendar.ics")
+  (call-process "ical2orgpy" nil "*Shell Command Output*" nil
+                "calendar.ics" "exchange2org/outlook_calendar.org")
+  (delete-file "calendar.ics")
+  )
 
 (defun kevin/strip-filename (str) (substring str (1+ (string-match "_" str)) -4) )
-  (defun kevin/format-filename-for-agenda ()
+(defun kevin/format-filename-for-agenda ()
   "Format the contents of :SUMMARY: property to show in agenda view."
     (let ((local_fname (kevin/strip-filename (file-name-nondirectory (org-entry-get (point) "FILE")))))
     (if (not (seq-empty-p local_fname))

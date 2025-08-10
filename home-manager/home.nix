@@ -54,6 +54,7 @@ in
     emacs-all-the-icons-fonts
 
     # Misc
+    ical2orgpy
     ghostscript
     poppler_utils # pdffonts, check for type 3
     ffmpeg
