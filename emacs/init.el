@@ -204,7 +204,7 @@
   (org-return-follows-link t)
   (org-hidden-keywords '(title))
   (org-cycle-level-faces nil)
-  (org-tags-column -55)
+  (org-tags-column -50)
   (org-n-level-faces 5)
   (org-hide-emphasis-markers t)  ; Make so *bold* is typeset as bold
 
@@ -213,8 +213,13 @@
   (org-capture-templates
       '(("t" "TODO" entry (file+headline "misc_todos.org" "Captured")
          "** TODO %?")
+        ("m" "Meeting Notes" entry (file+headline "misc_todos.org" "Captured")
+         "** %(format-time-string \"%d.%m.%Y\") %^{Meeting Name} \n Participants: %^{Participants} \n %?")
         ("p" "Personal TODO" entry (file+headline "misc_pers_todos.org" "Captured")
          "** TODO %?")))
+
+  ;; Link
+  (org-link-shell-confirm-function nil)
   
   ;; Export
   (org-export-with-toc nil)
@@ -236,6 +241,10 @@
   :config  
   (load-file (concat user-emacs-directory "init-agenda.el"))
   (add-to-list 'org-modules 'org-habit t)
+  (org-link-set-parameters "explore"
+                           :follow (lambda (path)
+                                     (start-process "explorer" nil "explorer.exe" path))
+                           :export nil)
 
 )
 
@@ -355,20 +364,9 @@
   :hook
   (org-mode . org-superstar-mode))
 
-
-;; Old packages not currently used
-;;(use-package ein :custom (ein:jupyter-server-use-subcommand "notebook"))
-;;(use-package 'org-tree-slide)
-;;(use-package 'org-download)
-;;(add-hook 'dired-mode-hook 'org-download-enable)
-;;(use-package 'org-fragtog)
-;;(add-hook 'org-mode-hook (lambda () (org-fragtog-mode 1)))
-;;(use-package 'citeproc)  ;;Org-Outlook integration
-
-
 (defun kevin/org-prompt-for-tag-on-todo-state-change ()
   "Prompt for a tag when changing to a specific TODO state."
-  (when (string= org-state "DELEGATED")  ;; replace MYSTATE with your desired TODO state
+  (when (string= org-state "DELEGATED")
     (let ((tag (completing-read "Tag to add: " (org-get-buffer-tags))))
       (when (not (string-empty-p tag))
         (org-set-tags-to tag )))))
