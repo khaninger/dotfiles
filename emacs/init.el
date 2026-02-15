@@ -29,9 +29,9 @@
 (setq-default normal-erase-is-backspace-mode 1) ;; Ctrl-backspace work in terminal mode
                                         ;(setq-default vterm-shell "$SHELL -l")   ;; for zsh to load interactively
 (setq-default vterm-shell "bash -l")   ;; for zsh to load interactively
-(setq-default initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+;;(setq-default initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+(setq-default initial-buffer-choice (lambda () (find-file (concat org-directory "/misc_todos.org"))))
 (setq-default server-client-instructions nil)  ;;  prevent help instructions on  server client start
-
 
 ;; General appearance
 (setq-default indent-tabs-mode nil)
@@ -216,7 +216,13 @@
         ("m" "Meeting Notes" entry (file+headline "misc_todos.org" "Captured")
          "** %(format-time-string \"%d.%m.%Y\") %^{Meeting Name} \n Participants: %^{Participants} \n %?")
         ("p" "Personal TODO" entry (file+headline "misc_pers_todos.org" "Captured")
-         "** TODO %?")))
+         "** TODO %?")
+        ("l" "Background link capture" entry (file+headline "misc_todos.org" "Captured")
+         "** %c"
+         :immediate-finish t)
+        ("k" "Capture and Kill" entry (file+headline "misc_todos.org" "Captured")
+         "** TODO %?"
+         :after-finalize save-buffers-kill-terminal)))
 
   ;; Link
   (org-link-shell-confirm-function nil)

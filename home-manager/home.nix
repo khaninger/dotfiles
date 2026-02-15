@@ -35,6 +35,7 @@ in
     ruff
     #ruff-lsp # missing in unstable, but seems to run from just ruff 
     poetry
+    uv
     python3Packages.python-lsp-server
     
     # Rust
@@ -54,6 +55,7 @@ in
     emacs-all-the-icons-fonts
 
     # Misc
+    codex
     ical2orgpy
     ghostscript
     poppler_utils # pdffonts, check for type 3
