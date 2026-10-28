@@ -213,8 +213,8 @@
   (org-capture-templates
       '(("t" "TODO" entry (file+headline "misc_todos.org" "Captured")
          "** TODO %?")
-        ("m" "Meeting Notes" entry (file+headline "misc_todos.org" "Captured")
-         "** %(format-time-string \"%d.%m.%Y\") %^{Meeting Name} \n Participants: %^{Participants} \n %?")
+        ("m" "Meeting Notes" entry (file+headline "misc_meetings.org" "2026")
+         "** %<%d.%m.%Y> %^{Meeting Name} \n :PROPERTIES: \n :CREATED: %U\n :END: \n\n *Participants:* %^{Participants} \n\n %?")
         ("p" "Personal TODO" entry (file+headline "misc_pers_todos.org" "Captured")
          "** TODO %?")
         ("l" "Background link capture" entry (file+headline "misc_todos.org" "Captured")
