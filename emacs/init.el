@@ -30,7 +30,7 @@
                                         ;(setq-default vterm-shell "$SHELL -l")   ;; for zsh to load interactively
 (setq-default vterm-shell "bash -l")   ;; for zsh to load interactively
 ;;(setq-default initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
-(setq-default initial-buffer-choice (lambda () (find-file (concat org-directory "/misc_todos.org"))))
+(setq-default initial-buffer-choice (lambda () (find-file (concat org-directory "/todos.org"))))
 (setq-default server-client-instructions nil)  ;;  prevent help instructions on  server client start
 
 ;; General appearance
