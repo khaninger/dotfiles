@@ -209,18 +209,18 @@
   (org-hide-emphasis-markers t)  ; Make so *bold* is typeset as bold
 
   ;; Capture
-  (org-default-notes-file (concat org-directory "\misc_todos.org"))
+  (org-default-notes-file (concat org-directory "\todos.org"))
   (org-capture-templates
-      '(("t" "TODO" entry (file+headline "misc_todos.org" "Captured")
+      '(("t" "TODO" entry (file+headline "todos.org" "Captured")
          "** TODO %?")
-        ("m" "Meeting Notes" entry (file+headline "misc_meetings.org" "2026")
+        ("m" "Meeting Notes" entry (file+headline "meetings.org" "2026")
          "** %<%d.%m.%Y> %^{Meeting Name} \n :PROPERTIES: \n :CREATED: %U\n :END: \n\n *Participants:* %^{Participants} \n\n %?")
-        ("p" "Personal TODO" entry (file+headline "misc_pers_todos.org" "Captured")
+        ("p" "Personal TODO" entry (file+headline "pers\todos_pers.org" "Captured")
          "** TODO %?")
-        ("l" "Background link capture" entry (file+headline "misc_todos.org" "Captured")
+        ("l" "Background link capture" entry (file+headline "todos.org" "To Read")
          "** %c"
          :immediate-finish t)
-        ("k" "Capture and Kill" entry (file+headline "misc_todos.org" "Captured")
+        ("k" "Capture and Kill" entry (file+headline "todos.org" "Captured")
          "** TODO %?"
          :after-finalize save-buffers-kill-terminal)))
 
@@ -267,9 +267,9 @@
     "Temp buffer with my commonly-used keybindings"
     [
      ["File Navigation"
-      ("s" "TODOs" (lambda () (interactive) (find-file (expand-file-name "misc_todos.org" org-directory))))
+      ("s" "TODOs" (lambda () (interactive) (find-file (expand-file-name "todos.org" org-directory))))
       ("d" "Dashboard" (lambda () (interactive) (switch-to-buffer "*dashboard*")))
-      ("f" "Personal TODOs" (lambda () (interactive) (find-file (expand-file-name "misc_pers_todos.org" org-directory))))
+      ("f" "Personal TODOs" (lambda () (interactive) (find-file (expand-file-name "pers/todos_pers.org" org-directory))))
       
       ]
 
